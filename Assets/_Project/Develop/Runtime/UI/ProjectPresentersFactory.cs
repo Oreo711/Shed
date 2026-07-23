@@ -1,0 +1,15 @@
+﻿
+using _Project.Develop.Runtime.Infrastructure.DI;
+
+namespace _Project.Develop.Runtime.UI
+{
+    public class ProjectPresentersFactory
+    {
+        private readonly DIContainer _container;
+
+        public ProjectPresentersFactory(DIContainer container)
+        {
+            _container = container;
+        }
+    }
+}
