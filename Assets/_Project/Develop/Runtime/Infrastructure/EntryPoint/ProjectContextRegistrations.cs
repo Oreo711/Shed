@@ -17,7 +17,7 @@ using Object = UnityEngine.Object;
 
 namespace _Project.Develop.Runtime.Infrastructure.EntryPoint
 {
-    public class ProjectContextRegistrations
+    public static class ProjectContextRegistrations
     {
         public static void Process(DIContainer container)
         {

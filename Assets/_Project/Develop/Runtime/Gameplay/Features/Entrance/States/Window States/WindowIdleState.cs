@@ -9,7 +9,7 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Window_Stat
 	{
 		public void OnEnter (IStateMachine<Window, EntranceTriggers> machine)
 		{
-			Debug.Log("The figure in the window disappears.");
+
 		}
 
 		public void OnExit (IStateMachine<Window, EntranceTriggers> machine)

@@ -8,7 +8,7 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Closet_Stat
 	{
 		public void OnEnter (IStateMachine<Closet, EntranceTriggers> machine)
 		{
-			Debug.Log("The closet is empty.");
+
 		}
 
 		public void OnExit (IStateMachine<Closet, EntranceTriggers> machine)

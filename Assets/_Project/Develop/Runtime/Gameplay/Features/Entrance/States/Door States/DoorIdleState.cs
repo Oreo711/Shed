@@ -9,7 +9,7 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Door_States
 	{
 		public void OnEnter (IStateMachine<Door, EntranceTriggers> machine)
 		{
-			Debug.Log("Noone is at the door anymore.");
+			Debug.Log("They have left the door.");
 		}
 
 		public void OnExit (IStateMachine<Door, EntranceTriggers> machine)

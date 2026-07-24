@@ -10,7 +10,10 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Door_States
 		public void OnEnter (IStateMachine<Door, EntranceTriggers> machine)
 		{
 			machine.Context.Breach();
-			Debug.Log("Breached");
+
+			machine.Context.transform.rotation = Quaternion.Euler(0, 80, 0);
+
+			Debug.Log("Died to door");
 		}
 
 		public void OnExit (IStateMachine<Door, EntranceTriggers> machine)

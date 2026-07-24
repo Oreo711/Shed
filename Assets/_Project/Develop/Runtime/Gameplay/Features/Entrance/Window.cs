@@ -50,6 +50,11 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 			return stateMachine;
 		}
 
+		public void Activate ()
+		{
+			_stateMachine.Fire(EntranceTriggers.warning);
+		}
+
 		public void Breach ()
 		{
 			Breached?.Invoke();

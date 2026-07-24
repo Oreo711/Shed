@@ -14,12 +14,12 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Closet_Stat
 			_breachTimer = machine.Context.BreachTime;
 			_pacifyTimer = machine.Context.PacifyTime;
 
-			Debug.Log("Something is in the closet.");
+			machine.Context.Door.rotation = Quaternion.Euler(0, 20, 0);
 		}
 
 		public void OnExit (IStateMachine<Closet, EntranceTriggers> machine)
 		{
-
+			machine.Context.Door.rotation = Quaternion.Euler(0, 0, 0);
 		}
 
 		public void Tick (IStateMachine<Closet, EntranceTriggers> machine, float deltaTime)

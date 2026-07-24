@@ -15,12 +15,12 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Window_Stat
 			_breachTimer = machine.Context.BreachTime;
 			_pacifyTimer = machine.Context.PacifyTime;
 
-			Debug.Log("Something is at the window");
+			machine.Context.transform.rotation = Quaternion.Euler(0, -25, 0);
 		}
 
 		public void OnExit (IStateMachine<Window, EntranceTriggers> machine)
 		{
-
+			machine.Context.transform.rotation = Quaternion.Euler(0, 0, 0);
 		}
 
 		public void Tick (IStateMachine<Window, EntranceTriggers> machine, float deltaTime)

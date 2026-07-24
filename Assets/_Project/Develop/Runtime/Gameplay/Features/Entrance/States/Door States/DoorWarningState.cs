@@ -17,11 +17,15 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Door_States
 			_pacifyTimer      = machine.Context.PacifyTime;
 
 			Debug.Log("Something is at the door.");
+
+			machine.Context.transform.rotation = Quaternion.Euler(0, 25, 0);
 		}
 
 		public void OnExit (IStateMachine<Door, EntranceTriggers> machine)
 		{
 			_isPrepared = false;
+
+			machine.Context.transform.rotation = Quaternion.Euler(0, 0, 0);
 		}
 
 		public void Tick (IStateMachine<Door, EntranceTriggers> machine, float deltaTime)

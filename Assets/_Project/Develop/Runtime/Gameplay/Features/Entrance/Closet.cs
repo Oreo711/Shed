@@ -10,16 +10,18 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 	{
 		public event Action Breached;
 
-		[SerializeField] private Player _player;
-		[SerializeField] private float  _breachTime;
-		[SerializeField] private float  _pacifyTime;
+		[SerializeField] private Player    _player;
+		[SerializeField] private Transform _door;
+		[SerializeField] private float     _breachTime;
+		[SerializeField] private float     _pacifyTime;
 
 		private bool _isBeingPacified;
 
-		public Player Player          => _player;
-		public float  BreachTime      => _breachTime;
-		public float  PacifyTime      => _pacifyTime;
-		public bool   IsBeingPacified => _isBeingPacified;
+		public Player    Player          => _player;
+		public Transform Door            => _door;
+		public float     BreachTime      => _breachTime;
+		public float     PacifyTime      => _pacifyTime;
+		public bool      IsBeingPacified => _isBeingPacified;
 
 		private StateMachine<Closet, EntranceTriggers> _stateMachine;
 
@@ -50,6 +52,11 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 			stateMachine.Start();
 
 			return stateMachine;
+		}
+
+		public void Activate ()
+		{
+			_stateMachine.Fire(EntranceTriggers.warning);
 		}
 
 		private void OnMouseDown()

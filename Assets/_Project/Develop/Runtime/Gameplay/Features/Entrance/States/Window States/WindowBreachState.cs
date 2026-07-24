@@ -9,7 +9,9 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Window_Stat
 		public void OnEnter (IStateMachine<Window, EntranceTriggers> machine)
 		{
 			machine.Context.Breach();
-			Debug.Log("Breached");
+			machine.Context.transform.rotation = Quaternion.Euler(0, -80, 0);
+
+			Debug.Log("Died to window");
 		}
 
 		public void OnExit (IStateMachine<Window, EntranceTriggers> machine)

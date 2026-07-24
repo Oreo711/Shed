@@ -10,7 +10,10 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Closet_Stat
 		public void OnEnter (IStateMachine<Closet, EntranceTriggers> machine)
 		{
 			machine.Context.Breach();
-			Debug.Log("Breached");
+
+			machine.Context.Door.rotation = Quaternion.Euler(0, 120, 0);
+
+			Debug.Log("Died to closet");
 		}
 
 		public void OnExit (IStateMachine<Closet, EntranceTriggers> machine)
