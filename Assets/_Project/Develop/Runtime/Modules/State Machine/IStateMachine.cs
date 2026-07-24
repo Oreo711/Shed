@@ -2,7 +2,7 @@ using System;
 using JetBrains.Annotations;
 
 
-namespace Modules.StateMachineLite._Project.Develop.Runtime.Modules.State_Machine
+namespace Modules.StateMachineLite.Develop.Runtime.Modules.State_Machine
 {
 	/// <summary>
 	///     Narrow runtime view of a state machine handed to its states. Exposes only what a state legitimately needs at

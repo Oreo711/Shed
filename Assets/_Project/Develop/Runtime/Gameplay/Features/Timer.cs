@@ -12,7 +12,7 @@ namespace _Project.Develop.Runtime.Gameplay.Features
 		public event Action NightPassed;
 
 		public int Minutes {get; private set;}
-		public int Hours {get; private set;}
+		public int Hours   {get; private set;}
 
 		private readonly ICoroutinePerformer _coroutinePerformer;
 
@@ -23,7 +23,7 @@ namespace _Project.Develop.Runtime.Gameplay.Features
 			_coroutinePerformer = coroutinePerformer;
 		}
 
-		public void Launch ()
+		public void Start ()
 		{
 			_countProcess = _coroutinePerformer.StartCoroutine(Count());
 		}
@@ -43,16 +43,20 @@ namespace _Project.Develop.Runtime.Gameplay.Features
 					HourPassed?.Invoke();
 
 					if (Hours >= 7)
-					{
-						NightPassed?.Invoke();
-					}
+						break;
 				}
 			}
+
+			NightPassed?.Invoke();
 		}
 
 		public void Stop ()
 		{
+			if (_countProcess != null)
+				return;
+
 			_coroutinePerformer.StopCoroutine(_countProcess);
+			_countProcess = null;
 		}
 	}
 }

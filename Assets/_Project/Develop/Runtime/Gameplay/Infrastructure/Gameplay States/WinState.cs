@@ -1,5 +1,4 @@
-using Modules.StateMachineLite;
-using Modules.StateMachineLite._Project.Develop.Runtime.Modules.State_Machine;
+using Modules.StateMachineLite.Develop.Runtime.Modules.State_Machine;
 
 
 namespace _Project.Develop.Runtime.Gameplay.Infrastructure.Gameplay_States

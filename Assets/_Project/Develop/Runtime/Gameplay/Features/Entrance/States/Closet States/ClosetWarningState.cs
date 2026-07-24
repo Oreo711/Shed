@@ -1,4 +1,4 @@
-using Modules.StateMachineLite._Project.Develop.Runtime.Modules.State_Machine;
+using Modules.StateMachineLite.Develop.Runtime.Modules.State_Machine;
 using UnityEngine;
 
 
@@ -35,12 +35,12 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Closet_Stat
 
 			if (_pacifyTimer <= 0)
 			{
-				machine.Fire(EntranceTriggers.idle);
+				machine.Fire(EntranceTriggers.Idle);
 			}
 
 			if (_breachTimer <= 0)
 			{
-				machine.Fire(EntranceTriggers.breach);
+				machine.Fire(EntranceTriggers.Breach);
 			}
 		}
 	}

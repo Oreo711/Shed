@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 
 
-namespace Modules.StateMachineLite._Project.Develop.Runtime.Modules.State_Machine
+namespace Modules.StateMachineLite.Develop.Runtime.Modules.State_Machine
 {
 	/// <summary>
 	/// A minimal synchronous, trigger-driven finite state machine.

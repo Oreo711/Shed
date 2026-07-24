@@ -1,26 +1,24 @@
 using System;
 using _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Door_States;
-using _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Window_States;
-using Modules.StateMachineLite;
-using Modules.StateMachineLite._Project.Develop.Runtime.Modules.State_Machine;
+using Modules.StateMachineLite.Develop.Runtime.Modules.State_Machine;
 using UnityEngine;
 
 
 namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 {
-	public class Door : MonoBehaviour, IStateContext
+	public class Door : BreachSource, IStateContext
 	{
-		public event Action Breached;
-
 		[SerializeField] private Player _player;
 		[SerializeField] private float  _preparationTime;
 		[SerializeField] private float  _pacifyTime;
 
+		private StateMachine<Door, EntranceTriggers> _stateMachine;
+
+		public override event Action<IBreachSource> Breached;
+
 		public Player Player          => _player;
 		public float  PreparationTime => _preparationTime;
 		public float  PacifyTime      => _pacifyTime;
-
-		private StateMachine<Door, EntranceTriggers> _stateMachine;
 
 		private void Awake ()
 		{
@@ -37,12 +35,12 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 			StateMachine<Door, EntranceTriggers> stateMachine = new(this);
 
 			stateMachine.AddState<DoorIdleState>()
-			            .AllowTransition<DoorWarningState>(EntranceTriggers.warning)
+			            .AllowTransition<DoorWarningState>(EntranceTriggers.Warning)
 			            .SetAsInitial();
 
 			stateMachine.AddState<DoorWarningState>()
-			            .AllowTransition<DoorIdleState>(EntranceTriggers.idle)
-			            .AllowTransition<DoorBreachState>(EntranceTriggers.breach);
+			            .AllowTransition<DoorIdleState>(EntranceTriggers.Idle)
+			            .AllowTransition<DoorBreachState>(EntranceTriggers.Breach);
 
 			stateMachine.AddState<DoorBreachState>();
 
@@ -51,14 +49,14 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 			return stateMachine;
 		}
 
-		public void Activate ()
+		public override void Activate ()
 		{
-			_stateMachine.Fire(EntranceTriggers.warning);
+			_stateMachine.Fire(EntranceTriggers.Warning);
 		}
 
 		public void Breach ()
 		{
-			Breached?.Invoke();
+			Breached?.Invoke(this);
 		}
 	}
 }

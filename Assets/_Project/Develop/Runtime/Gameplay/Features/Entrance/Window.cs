@@ -1,16 +1,13 @@
 using System;
 using _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Window_States;
-using Modules.StateMachineLite;
-using Modules.StateMachineLite._Project.Develop.Runtime.Modules.State_Machine;
+using Modules.StateMachineLite.Develop.Runtime.Modules.State_Machine;
 using UnityEngine;
 
 
 namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 {
-	public class Window : MonoBehaviour, IStateContext
+	public class Window : BreachSource, IStateContext
 	{
-		public event Action Breached;
-
 		[SerializeField] private Player _player;
 		[SerializeField] private float  _breachTime;
 		[SerializeField] private float  _pacifyTime;
@@ -20,6 +17,8 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 		public float  PacifyTime => _pacifyTime;
 
 		private StateMachine<Window, EntranceTriggers> _stateMachine;
+
+		public override event Action<IBreachSource> Breached;
 
 		private void Awake ()
 		{
@@ -36,12 +35,12 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 			StateMachine<Window, EntranceTriggers> stateMachine = new(this);
 
 			stateMachine.AddState<WindowIdleState>()
-			            .AllowTransition<WindowWarningState>(EntranceTriggers.warning)
+			            .AllowTransition<WindowWarningState>(EntranceTriggers.Warning)
 			            .SetAsInitial();
 
 			stateMachine.AddState<WindowWarningState>()
-			            .AllowTransition<WindowIdleState>(EntranceTriggers.idle)
-			            .AllowTransition<WindowBreachState>(EntranceTriggers.breach);
+			            .AllowTransition<WindowIdleState>(EntranceTriggers.Idle)
+			            .AllowTransition<WindowBreachState>(EntranceTriggers.Breach);
 
 			stateMachine.AddState<WindowBreachState>();
 
@@ -50,14 +49,14 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 			return stateMachine;
 		}
 
-		public void Activate ()
+		public override void Activate ()
 		{
-			_stateMachine.Fire(EntranceTriggers.warning);
+			_stateMachine.Fire(EntranceTriggers.Warning);
 		}
 
 		public void Breach ()
 		{
-			Breached?.Invoke();
+			Breached?.Invoke(this);
 		}
 	}
 }

@@ -1,4 +1,4 @@
-namespace Modules.StateMachineLite._Project.Develop.Runtime.Modules.State_Machine
+namespace Modules.StateMachineLite.Develop.Runtime.Modules.State_Machine
 {
 	/// <summary>
 	/// Marker for an object that owns a <see cref="StateMachine{TContext,TTrigger}"/> and exposes its data to the

@@ -1,19 +1,19 @@
 using System;
 using _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Closet_States;
-using Modules.StateMachineLite._Project.Develop.Runtime.Modules.State_Machine;
+using Modules.StateMachineLite.Develop.Runtime.Modules.State_Machine;
 using UnityEngine;
 
 
 namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 {
-	public class Closet : MonoBehaviour, IStateContext
+	public class Closet : BreachSource, IStateContext
 	{
-		public event Action Breached;
-
 		[SerializeField] private Player    _player;
 		[SerializeField] private Transform _door;
 		[SerializeField] private float     _breachTime;
 		[SerializeField] private float     _pacifyTime;
+
+		private StateMachine<Closet, EntranceTriggers> _stateMachine;
 
 		private bool _isBeingPacified;
 
@@ -23,7 +23,7 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 		public float     PacifyTime      => _pacifyTime;
 		public bool      IsBeingPacified => _isBeingPacified;
 
-		private StateMachine<Closet, EntranceTriggers> _stateMachine;
+		public override event Action<IBreachSource> Breached;
 
 		private void Awake ()
 		{
@@ -32,7 +32,12 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 
 		private void Update ()
 		{
-			_stateMachine?.Tick(Time.deltaTime);
+			_stateMachine.Tick(Time.deltaTime);
+		}
+
+		public override void Activate ()
+		{
+			_stateMachine.Fire(EntranceTriggers.Warning);
 		}
 
 		private StateMachine<Closet, EntranceTriggers> BuildStateMachine ()
@@ -40,12 +45,12 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 			StateMachine<Closet, EntranceTriggers> stateMachine = new(this);
 
 			stateMachine.AddState<ClosetIdleState>()
-			            .AllowTransition<ClosetWarningState>(EntranceTriggers.warning)
+			            .AllowTransition<ClosetWarningState>(EntranceTriggers.Warning)
 			            .SetAsInitial();
 
 			stateMachine.AddState<ClosetWarningState>()
-			            .AllowTransition<ClosetIdleState>(EntranceTriggers.idle)
-			            .AllowTransition<ClosetBreachState>(EntranceTriggers.breach);
+			            .AllowTransition<ClosetIdleState>(EntranceTriggers.Idle)
+			            .AllowTransition<ClosetBreachState>(EntranceTriggers.Breach);
 
 			stateMachine.AddState<ClosetBreachState>();
 
@@ -54,24 +59,20 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 			return stateMachine;
 		}
 
-		public void Activate ()
-		{
-			_stateMachine.Fire(EntranceTriggers.warning);
-		}
-
-		private void OnMouseDown()
+		private void OnMouseDown ()
 		{
 			_isBeingPacified = true;
 		}
 
-		private void OnMouseUp()
+		private void OnMouseUp ()
 		{
+			// TODO: убедиться что работает корректно, если мышь отпущена за пределами коллайдера
 			_isBeingPacified = false;
 		}
 
 		public void Breach ()
 		{
-			Breached?.Invoke();
+			Breached?.Invoke(this);
 		}
 	}
 }

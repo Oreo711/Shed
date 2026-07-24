@@ -2,7 +2,7 @@ using System;
 using JetBrains.Annotations;
 
 
-namespace Modules.StateMachineLite._Project.Develop.Runtime.Modules.State_Machine
+namespace Modules.StateMachineLite.Develop.Runtime.Modules.State_Machine
 {
 	/// <summary>
 	/// A single synchronous state. Receives the machine on every call so it can read

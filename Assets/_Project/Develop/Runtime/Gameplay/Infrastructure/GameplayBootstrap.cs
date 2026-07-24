@@ -1,112 +1,119 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
+using System.Collections.Generic;
 using _Project.Develop.Runtime.Gameplay.Features;
 using _Project.Develop.Runtime.Gameplay.Features.Entrance;
 using _Project.Develop.Runtime.Gameplay.Infrastructure.Gameplay_States;
 using _Project.Develop.Runtime.Infrastructure;
 using _Project.Develop.Runtime.Infrastructure.DI;
 using _Project.Develop.Runtime.Utilities.SceneManagment;
-using Modules.StateMachineLite._Project.Develop.Runtime.Modules.State_Machine;
+using Modules.StateMachineLite.Develop.Runtime.Modules.State_Machine;
 using UnityEngine;
 
 
 namespace _Project.Develop.Runtime.Gameplay.Infrastructure
 {
-    public class GameplayBootstrap : SceneBootstrap, IStateContext
-    {
-        [SerializeField] private Door   _door;
-        [SerializeField] private Window _window;
-        [SerializeField] private Window _otherWindow;
-        [SerializeField] private Closet _closet;
+	public class GameplayBootstrap : SceneBootstrap, IStateContext
+	{
+		[SerializeField] private List<BreachSource> _breachSources;
 
-        private DIContainer              _container;
-        private Timer                    _timer;
-        private EntranceActivatorService _entranceActivatorService;
-        private SceneSwitcherService     _sceneSwitcherService;
+		private DIContainer              _container;
+		private Timer                    _timer;
+		private EntranceActivatorService _entranceActivatorService;
+		private SceneSwitcherService     _sceneSwitcherService;
 
-        private StateMachine<GameplayBootstrap, GameplayTriggers> _stateMachine;
+		private StateMachine<GameplayBootstrap, GameplayTriggers> _stateMachine;
 
-        public override void ProcessRegistrations(DIContainer container)
-        {
-            _container = container;
+		private bool _isRunning;
 
-            GameplayContextRegistrations.Process(_container);
-        }
+		public override void ProcessRegistrations (DIContainer container)
+		{
+			_container = container;
 
-        public override IEnumerator Initialize()
-        {
-            _timer                    = _container.Resolve<Timer>();
-            _sceneSwitcherService     = _container.Resolve<SceneSwitcherService>();
-            _entranceActivatorService = _container.Resolve<EntranceActivatorService>();
+			GameplayContextRegistrations.Process(_container);
+		}
 
-            _entranceActivatorService.EntranceActivated += ActivateEntrance;
-            _window.Breached                            += OnBreached;
-            _timer.NightPassed                          += OnNightPassed;
+		public override IEnumerator Initialize ()
+		{
+			_timer                    = _container.Resolve<Timer>();
+			_sceneSwitcherService     = _container.Resolve<SceneSwitcherService>();
+			_entranceActivatorService = _container.Resolve<EntranceActivatorService>();
+			_entranceActivatorService.Initialize(_breachSources);
 
-            yield break;
-        }
+			_entranceActivatorService.EntranceBreached += OnBreached;
+			_timer.NightPassed                         += OnNightPassed;
 
-        private void ActivateEntrance (Entrances entrance)
-        {
-            switch (entrance)
-            {
-                case Entrances.door:
-                    _door.Activate();
-                    break;
-                case Entrances.window:
-                    _window.Activate();
-                    break;
-                case Entrances.otherWindow:
-                    _otherWindow.Activate();
-                    break;
-                case Entrances.closet:
-                    _closet.Activate();
-                    break;
-            }
-        }
+			yield break;
+		}
 
-        public override void Run()
-        {
-            _stateMachine = BuildStateMachine();
-            _timer.Launch();
-            _entranceActivatorService.Run();
-        }
+		public override void Run ()
+		{
+			_stateMachine = BuildStateMachine();
+			_timer.Start();
+			_entranceActivatorService.Run();
 
-        private void Update ()
-        {
-            _stateMachine?.Tick(Time.deltaTime);
-        }
+			_isRunning = true;
+		}
 
-        private StateMachine<GameplayBootstrap, GameplayTriggers> BuildStateMachine ()
-        {
-            StateMachine<GameplayBootstrap, GameplayTriggers> stateMachine = new(this);
+		private void Update ()
+		{
+			if (!_isRunning)
+				return;
 
-            stateMachine.AddState<GameplayState>()
-                        .AllowTransition<WinState>(GameplayTriggers.win)
-                        .AllowTransition<LossState>(GameplayTriggers.loss)
-                        .SetAsInitial();
+			_stateMachine.Tick(Time.deltaTime);
+		}
 
-            stateMachine.AddState<WinState>();
+		private StateMachine<GameplayBootstrap, GameplayTriggers> BuildStateMachine ()
+		{
+			StateMachine<GameplayBootstrap, GameplayTriggers> stateMachine = new(this);
 
-            stateMachine.AddState<LossState>();
+			stateMachine.AddState<GameplayState>()
+			            .AllowTransition<WinState>(GameplayTriggers.Win)
+			            .AllowTransition<LossState>(GameplayTriggers.Loss)
+			            .SetAsInitial();
 
-            stateMachine.Start();
+			stateMachine.AddState<WinState>();
 
-            return stateMachine;
-        }
+			stateMachine.AddState<LossState>();
 
-        private void OnNightPassed ()
-        {
-            _stateMachine.Fire(GameplayTriggers.win);
-            _timer.Stop();
-            _entranceActivatorService.Stop();
-        }
+			stateMachine.Start();
 
-        private void OnBreached ()
-        {
-            _stateMachine.Fire(GameplayTriggers.loss);
-            _timer.Stop();
-            _entranceActivatorService.Stop();
-        }
-    }
+			return stateMachine;
+		}
+
+		private void OnNightPassed ()
+		{
+			HandleSessionEnded();
+			_stateMachine.Fire(GameplayTriggers.Win);
+		}
+
+		private void OnBreached (IBreachSource _)
+		{
+			HandleSessionEnded();
+			_stateMachine.Fire(GameplayTriggers.Loss);
+		}
+
+		private void HandleSessionEnded ()
+		{
+			_entranceActivatorService.EntranceBreached -= OnBreached;
+
+			_timer.Stop();
+			_entranceActivatorService.Stop();
+		}
+
+		private void OnDestroy ()
+		{
+			Teardown();
+		}
+
+		private void Teardown ()
+		{
+			_timer.Stop();
+			_entranceActivatorService.Stop();
+			_stateMachine?.Stop();
+			_isRunning = false;
+
+			_entranceActivatorService.EntranceBreached -= OnBreached;
+			_timer.NightPassed                         -= OnNightPassed;
+		}
+	}
 }

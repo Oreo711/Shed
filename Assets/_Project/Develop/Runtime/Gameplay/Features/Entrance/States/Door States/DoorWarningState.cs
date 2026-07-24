@@ -1,5 +1,4 @@
-using Modules.StateMachineLite;
-using Modules.StateMachineLite._Project.Develop.Runtime.Modules.State_Machine;
+using Modules.StateMachineLite.Develop.Runtime.Modules.State_Machine;
 using UnityEngine;
 
 
@@ -46,14 +45,14 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Door_States
 
 			if (_pacifyTimer <= 0)
 			{
-				machine.Fire(EntranceTriggers.idle);
+				machine.Fire(EntranceTriggers.Idle);
 			}
 
 			Player player = machine.Context.Player;
 
 			if (player.IsWalking || player.IsUsingFlashlight)
 			{
-				machine.Fire(EntranceTriggers.breach);
+				machine.Fire(EntranceTriggers.Breach);
 			}
 		}
 	}

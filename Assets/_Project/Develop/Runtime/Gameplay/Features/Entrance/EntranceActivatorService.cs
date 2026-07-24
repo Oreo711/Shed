@@ -11,25 +11,20 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 {
 	public class EntranceActivatorService
 	{
-		public event Action<Entrances> EntranceActivated;
+		private readonly Timer                          _timer;
+		private readonly ICoroutinePerformer            _coroutinePerformer;
+		private readonly Dictionary<IBreachSource, int> _aggressionMeters = new();
 
-		private readonly Timer               _timer;
-		private readonly ICoroutinePerformer _coroutinePerformer;
+		private const float IntervalScale = 0.8f;
 
-		private readonly Dictionary<Entrances, int> _aggressionValues = new()
-		{
-			{ Entrances.door, 0 },
-			{ Entrances.window, 0 },
-			{ Entrances.otherWindow, 0 },
-			{ Entrances.closet, 0 },
-		};
+		private bool  _isRunning;
+		private float _minInterval = 8;
+		private float _maxInterval = 12;
 
-		private          float _minInterval   = 8;
-		private          float _maxInterval   = 12;
-		private readonly float _intervalScale = 0.8f;
+		private Coroutine _aggressionLoop;
+		private Coroutine _activationLoop;
 
-		private Coroutine _aggressionProcess;
-		private Coroutine _activationProcess;
+		public event Action<IBreachSource> EntranceBreached;
 
 		public EntranceActivatorService (Timer timer, ICoroutinePerformer coroutinePerformer)
 		{
@@ -37,95 +32,107 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 			_coroutinePerformer = coroutinePerformer;
 		}
 
+		public void Initialize (IReadOnlyList<IBreachSource> breachSources)
+		{
+			foreach (IBreachSource breachSource in breachSources)
+			{
+				_aggressionMeters.Add(breachSource, 0);
+				breachSource.Breached += HandleBreach;
+			}
+		}
+
 		public void Run ()
 		{
-			_aggressionProcess = _coroutinePerformer.StartCoroutine(GiveAggression());
-			_activationProcess = _coroutinePerformer.StartCoroutine(ActivateEntrances());
+			_aggressionLoop = _coroutinePerformer.StartCoroutine(IncreaseAggressionLoop());
+			_activationLoop = _coroutinePerformer.StartCoroutine(BreachActivationLoop());
 
 			_timer.HourPassed += ScaleInterval;
 		}
 
 		private void ScaleInterval ()
 		{
-			_minInterval *= _intervalScale;
-			_maxInterval *= _intervalScale;
+			_minInterval *= IntervalScale;
+			_maxInterval *= IntervalScale;
 		}
 
-		private IEnumerator ActivateEntrances ()
+		private IEnumerator BreachActivationLoop ()
 		{
 			yield return new WaitForSeconds(_maxInterval);
 
-			while (true)
+			while (_isRunning)
 			{
-				Entrances entrance = CalculateHighestAggression();
+				IBreachSource breachSource = GetSourceWithHighestAggression();
+				ActivateBreachSource(breachSource);
 
-				switch (entrance)
-				{
-					case Entrances.door:
-						EntranceActivated?.Invoke(Entrances.door);
-						break;
-					case Entrances.window:
-						EntranceActivated?.Invoke(Entrances.window);
-						break;
-					case Entrances.otherWindow:
-						EntranceActivated?.Invoke(Entrances.otherWindow);
-						break;
-					case Entrances.closet:
-						EntranceActivated?.Invoke(Entrances.closet);
-						break;
-				}
-
-				_aggressionValues[entrance] = 0;
 				float interval = Random.Range(_minInterval, _maxInterval);
 				yield return new WaitForSeconds(interval);
 			}
 		}
 
-		private IEnumerator GiveAggression ()
+		private void ActivateBreachSource (IBreachSource breachSource)
 		{
-			while (true)
+			_aggressionMeters[breachSource] = 0;
+			breachSource.Activate();
+		}
+
+		private IEnumerator IncreaseAggressionLoop ()
+		{
+			while (_isRunning)
 			{
 				yield return new WaitForSeconds(1);
 
-				int             aggression = Random.Range(1, 101);
-				int             index      = Random.Range(0, 4);
-				List<Entrances> entrances  = Enum.GetValues(typeof(Entrances)).Cast<Entrances>().ToList();
-				Entrances       key        = entrances[index];
+				int aggression = Random.Range(1, 101);
 
-				_aggressionValues[key] += aggression;
+				List<IBreachSource> breachSources = _aggressionMeters.Keys.ToList();
+				int                 index         = Random.Range(0, breachSources.Count);
+				IBreachSource       breachSource  = breachSources[index];
+
+				_aggressionMeters[breachSource] += aggression;
 			}
 		}
 
 		public void Stop ()
 		{
-			_coroutinePerformer.StopCoroutine(_aggressionProcess);
-			_coroutinePerformer.StopCoroutine(_activationProcess);
-			_timer.HourPassed -= ScaleInterval;
+			_coroutinePerformer.StopCoroutine(_aggressionLoop);
+			_coroutinePerformer.StopCoroutine(_activationLoop);
+			_isRunning = false;
+
+			Teardown();
 		}
 
-		private Entrances CalculateHighestAggression ()
+		private void Teardown ()
 		{
-			int       highestAggression = _aggressionValues[Entrances.door];
-			Entrances entrance          = Entrances.door;
+			_timer.HourPassed -= ScaleInterval;
 
-			if (highestAggression < _aggressionValues[Entrances.window])
+			foreach (IBreachSource breachSource in _aggressionMeters.Keys)
 			{
-				highestAggression = _aggressionValues[Entrances.window];
-				entrance          = Entrances.window;
+				breachSource.Breached -= HandleBreach;
 			}
 
-			if (highestAggression < _aggressionValues[Entrances.otherWindow])
+			_aggressionMeters.Clear();
+		}
+
+		private void HandleBreach (IBreachSource breachSource)
+		{
+			EntranceBreached?.Invoke(breachSource);
+		}
+
+		private IBreachSource GetSourceWithHighestAggression ()
+		{
+			IBreachSource breachSource = null; // not possible to get null if aggression meters are initialized correctly
+
+			int aggression = -1;
+
+			foreach (KeyValuePair<IBreachSource, int> aggressionMeter in _aggressionMeters)
 			{
-				highestAggression = _aggressionValues[Entrances.otherWindow];
-				entrance          = Entrances.otherWindow;
+				if (aggressionMeter.Value > aggression)
+				{
+					aggression   = aggressionMeter.Value;
+					breachSource = aggressionMeter.Key;
+				}
 			}
 
-			if (highestAggression < _aggressionValues[Entrances.closet])
-			{
-				entrance = Entrances.closet;
-			}
-
-			return entrance;
+			return breachSource;
 		}
 	}
 }
