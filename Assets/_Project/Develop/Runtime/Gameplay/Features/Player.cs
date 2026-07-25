@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 
@@ -5,28 +6,99 @@ namespace _Project.Develop.Runtime.Gameplay.Features
 {
     public class Player : MonoBehaviour
     {
-        [SerializeField] private Light                 _pointLight;
-        [SerializeField] private Light                 _spotLight;
+        [SerializeField] private Flashlight            _flashlight;
+        [SerializeField] private Gun                   _gun;
         [SerializeField] private FirstPersonController _controller;
         [SerializeField] private Camera                _camera;
 
-        public bool   IsWalking         => _controller.IsWalking;
-        public bool   IsUsingFlashlight => _spotLight.gameObject.activeSelf;
-        public Camera Camera            => _camera;
+        [SerializeField] private Collider _batteryBox;
+        [SerializeField] private Collider _clock;
+
+        private bool  _isRecharging;
+        private float _remainingRechargeTime;
+        private bool  _isFacingClock;
+        private bool  _isActive = true;
+
+        public bool                  IsWalking             => _controller.IsWalking;
+        public bool                  IsUsingFlashlight     => _flashlight.IsOn;
+        public bool                  IsRecharging          => _isRecharging;
+        public bool                  IsFacingClock         => _isFacingClock;
+        public float                 RemainingRechargeTime => _remainingRechargeTime;
+        public Camera                Camera                => _camera;
+        public FirstPersonController Controller            => _controller;
+        public Flashlight            Flashlight            => _flashlight;
+        public Gun                   Gun                   => _gun;
+        public bool                  CanNotAct             {get; set;}
+
+
+        public event Action HitGunshot;
 
         private void Awake ()
         {
-            _pointLight.gameObject.SetActive(false);
-            _spotLight.gameObject.SetActive(false);
+            _remainingRechargeTime = _flashlight.RechargeTime;
         }
 
-        private void Update()
+        private void Update ()
         {
+            if (!_isActive)
+            {
+                _controller.playerCanMove = false;
+                return;
+            }
+
+            _controller.playerCanMove = true;
+
             if (Input.GetKeyDown(KeyCode.F))
             {
-                _spotLight.gameObject.SetActive(!_spotLight.gameObject.activeSelf);
-                _pointLight.gameObject.SetActive(!_pointLight.gameObject.activeSelf);
+                _flashlight.Toggle();
             }
+
+            if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out RaycastHit hit))
+            {
+                if (hit.collider == _clock && (_clock.transform.position - transform.position).magnitude <= 7f)
+                {
+                    _isFacingClock = true;
+                } else
+                {
+                    _isFacingClock = false;
+                }
+
+                if (hit.collider == _batteryBox && (_batteryBox.transform.position - transform.position).magnitude <= 2.5f)
+                {
+                    if (Input.GetKeyDown(KeyCode.E) || IsRecharging)
+                    {
+                        if (!IsRecharging)
+                        {
+                            _isRecharging = true;
+                            _flashlight.PlayRechargeSound();
+                        }
+
+                        _remainingRechargeTime -= Time.deltaTime;
+
+                        if (_remainingRechargeTime <= 0)
+                        {
+                            _flashlight.Recharge();
+                            _isRecharging = false;
+                        }
+                    }
+                }
+                else
+                {
+                    _isRecharging          = false;
+                    _remainingRechargeTime = _flashlight.RechargeTime;
+                    _flashlight.StopRechargeSound();
+                }
+            }
+        }
+
+        public void SetActive (bool value)
+        {
+            _isActive = value;
+        }
+
+        public void OnSuccessfulGunshot ()
+        {
+            HitGunshot?.Invoke();
         }
     }
 }

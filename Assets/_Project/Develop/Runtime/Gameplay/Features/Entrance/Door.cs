@@ -8,9 +8,11 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 {
 	public class Door : BreachSource, IStateContext
 	{
-		[SerializeField] private Player _player;
-		[SerializeField] private float  _preparationTime;
-		[SerializeField] private float  _pacifyTime;
+		[SerializeField] private Player      _player;
+		[SerializeField] private float       _preparationTime;
+		[SerializeField] private float       _pacifyTime;
+		[SerializeField] private AudioSource _openSound;
+		[SerializeField] private AudioSource _closeSound;
 
 		private StateMachine<Door, EntranceTriggers> _stateMachine;
 
@@ -42,7 +44,8 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 			            .AllowTransition<DoorIdleState>(EntranceTriggers.Idle)
 			            .AllowTransition<DoorBreachState>(EntranceTriggers.Breach);
 
-			stateMachine.AddState<DoorBreachState>();
+			stateMachine.AddState<DoorBreachState>()
+			            .AllowTransition<DoorIdleState>(EntranceTriggers.Idle);
 
 			stateMachine.Start();
 
@@ -52,6 +55,21 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 		public override void Activate ()
 		{
 			_stateMachine.Fire(EntranceTriggers.Warning);
+		}
+
+		public void PlayOpenSound ()
+		{
+			_openSound.Play();
+		}
+
+		public void PlayCloseSound ()
+		{
+			_closeSound.Play();
+		}
+
+		public override void Reset ()
+		{
+			_stateMachine.Fire(EntranceTriggers.Idle);
 		}
 
 		public void Breach ()

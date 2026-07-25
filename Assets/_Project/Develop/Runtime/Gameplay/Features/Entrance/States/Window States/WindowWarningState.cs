@@ -26,7 +26,11 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Window_Stat
 		{
 			Camera camera = machine.Context.Player.Camera;
 
-			if (Physics.Raycast(camera.transform.position, camera.transform.forward, out RaycastHit hit))
+			if (
+				Physics.Raycast(camera.transform.position,
+					camera.transform.forward,
+					out RaycastHit hit, 20f,
+					LayerMask.GetMask("Entrance")))
 			{
 				Window window = machine.Context;
 
@@ -36,7 +40,10 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Window_Stat
 				}
 				else
 				{
-					_breachTimer -= deltaTime;
+					if (!machine.Context.Player.CanNotAct)
+					{
+						_breachTimer -= deltaTime;
+					}
 					_pacifyTimer =  machine.Context.PacifyTime;
 				}
 			}

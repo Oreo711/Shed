@@ -1,7 +1,12 @@
 ﻿using _Project.Develop.Runtime.Gameplay.Features;
 using _Project.Develop.Runtime.Gameplay.Features.Entrance;
 using _Project.Develop.Runtime.Infrastructure.DI;
+using _Project.Develop.Runtime.UI;
+using _Project.Develop.Runtime.UI.Core;
+using _Project.Develop.Runtime.UI.Gameplay;
+using _Project.Develop.Runtime.Utilities.AssetManagment;
 using _Project.Develop.Runtime.Utilities.CoroutineManagement;
+using UnityEngine;
 
 
 namespace _Project.Develop.Runtime.Gameplay.Infrastructure
@@ -13,6 +18,62 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure
             container.Register(CreateTimer);
 
             container.Register(CreateEntranceActivatorService);
+
+            container.Register(CreateGameplayUIRoot);
+
+            container.Register(CreateGameplayScreenPresenter);
+
+            container.Register(CreateGameplayPresentersFactory);
+
+            container.Register(CreateGameplayPopupService);
+
+            container.Register(CreatePlayerHolderService);
+        }
+
+        private static PlayerHolderService CreatePlayerHolderService (DIContainer c)
+        {
+            return new PlayerHolderService();
+        }
+
+        private static GameplayPopupService CreateGameplayPopupService(DIContainer c)
+        {
+            return new GameplayPopupService(
+                c.Resolve<ViewFactory>(),
+                c.Resolve<ProjectPresentersFactory>(),
+                c.Resolve<GameplayUIRoot>(),
+                c.Resolve<GameplayPresentersFactory>());
+        }
+
+        private static GameplayUIRoot CreateGameplayUIRoot(DIContainer c)
+        {
+            ResourcesAssetLoader resourcesAssetsLoader = c.Resolve<ResourcesAssetLoader>();
+
+            GameplayUIRoot gameplayUIRootPrefab = resourcesAssetsLoader
+                .Load<GameplayUIRoot>("UI/Gameplay/Gameplay UI Root");
+
+            return Object.Instantiate(gameplayUIRootPrefab);
+        }
+
+        private static GameplayScreenPresenter CreateGameplayScreenPresenter(DIContainer c)
+        {
+            GameplayUIRoot uiRoot = c.Resolve<GameplayUIRoot>();
+
+            GameplayScreenView view = c
+                                      .Resolve<ViewFactory>()
+                                      .Create<GameplayScreenView>(ViewIDs.GameplayScreen, uiRoot.HUDLayer);
+
+            GameplayScreenPresenter presenter = c
+                                                .Resolve<GameplayPresentersFactory>()
+                                                .CreateGameplayScreenPresenter(view);
+
+            presenter.Initialize();
+
+            return presenter;
+        }
+
+        private static GameplayPresentersFactory CreateGameplayPresentersFactory(DIContainer c)
+        {
+            return new GameplayPresentersFactory(c);
         }
 
         private static Timer CreateTimer (DIContainer c)

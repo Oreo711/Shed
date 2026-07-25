@@ -8,7 +8,7 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Window_Stat
 	{
 		public void OnEnter (IStateMachine<Window, EntranceTriggers> machine)
 		{
-
+			machine.Context.transform.rotation = Quaternion.Euler(0, 0, 0);
 		}
 
 		public void OnExit (IStateMachine<Window, EntranceTriggers> machine)
@@ -18,10 +18,7 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Window_Stat
 
 		public void Tick (IStateMachine<Window, EntranceTriggers> machine, float deltaTime)
 		{
-			if (Input.GetKeyDown(KeyCode.Z))
-			{
-				machine.Fire(EntranceTriggers.Warning);
-			}
+
 		}
 	}
 }

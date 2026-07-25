@@ -9,20 +9,25 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Door_States
 		private float _preparationTimer;
 		private float _pacifyTimer;
 		private bool  _isPrepared;
+		private bool  _playedCloseSound;
 
 		public void OnEnter (IStateMachine<Door, EntranceTriggers> machine)
 		{
 			_preparationTimer = machine.Context.PreparationTime;
 			_pacifyTimer      = machine.Context.PacifyTime;
+			machine.Context.PlayOpenSound();
 
-			Debug.Log("Something is at the door.");
+			machine.Context.Player.CanNotAct = true;
 
 			machine.Context.transform.rotation = Quaternion.Euler(0, 25, 0);
 		}
 
 		public void OnExit (IStateMachine<Door, EntranceTriggers> machine)
 		{
-			_isPrepared = false;
+			_isPrepared       = false;
+			_playedCloseSound = false;
+
+			machine.Context.Player.CanNotAct = false;
 
 			machine.Context.transform.rotation = Quaternion.Euler(0, 0, 0);
 		}
@@ -43,6 +48,12 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Door_States
 
 			_pacifyTimer -= deltaTime;
 
+			if (_pacifyTimer <= 1 && !_playedCloseSound)
+			{
+				machine.Context.PlayCloseSound();
+				_playedCloseSound = true;
+			}
+
 			if (_pacifyTimer <= 0)
 			{
 				machine.Fire(EntranceTriggers.Idle);
@@ -50,7 +61,7 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Door_States
 
 			Player player = machine.Context.Player;
 
-			if (player.IsWalking || player.IsUsingFlashlight)
+			if (player.IsWalking || player.IsUsingFlashlight || player.IsRecharging)
 			{
 				machine.Fire(EntranceTriggers.Breach);
 			}

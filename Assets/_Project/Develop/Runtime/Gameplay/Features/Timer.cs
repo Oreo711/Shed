@@ -9,14 +9,13 @@ namespace _Project.Develop.Runtime.Gameplay.Features
 	public class Timer
 	{
 		public event Action HourPassed;
-		public event Action NightPassed;
 
 		public int Minutes {get; private set;}
 		public int Hours   {get; private set;}
 
 		private readonly ICoroutinePerformer _coroutinePerformer;
 
-		private Coroutine _countProcess;
+		private bool _isRunning;
 
 		public Timer (ICoroutinePerformer coroutinePerformer)
 		{
@@ -25,12 +24,13 @@ namespace _Project.Develop.Runtime.Gameplay.Features
 
 		public void Start ()
 		{
-			_countProcess = _coroutinePerformer.StartCoroutine(Count());
+			_isRunning = true;
+			_coroutinePerformer.StartCoroutine(Count());
 		}
 
 		private IEnumerator Count ()
 		{
-			while (true)
+			while (_isRunning)
 			{
 				yield return new WaitForSeconds(1);
 
@@ -46,17 +46,11 @@ namespace _Project.Develop.Runtime.Gameplay.Features
 						break;
 				}
 			}
-
-			NightPassed?.Invoke();
 		}
 
 		public void Stop ()
 		{
-			if (_countProcess != null)
-				return;
-
-			_coroutinePerformer.StopCoroutine(_countProcess);
-			_countProcess = null;
+			_isRunning = false;
 		}
 	}
 }

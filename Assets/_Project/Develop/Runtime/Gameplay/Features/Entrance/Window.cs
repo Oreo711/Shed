@@ -42,7 +42,8 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 			            .AllowTransition<WindowIdleState>(EntranceTriggers.Idle)
 			            .AllowTransition<WindowBreachState>(EntranceTriggers.Breach);
 
-			stateMachine.AddState<WindowBreachState>();
+			stateMachine.AddState<WindowBreachState>()
+			            .AllowTransition<WindowIdleState>(EntranceTriggers.Idle);
 
 			stateMachine.Start();
 
@@ -52,6 +53,11 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 		public override void Activate ()
 		{
 			_stateMachine.Fire(EntranceTriggers.Warning);
+		}
+
+		public override void Reset ()
+		{
+			_stateMachine.Fire(EntranceTriggers.Idle);
 		}
 
 		public void Breach ()

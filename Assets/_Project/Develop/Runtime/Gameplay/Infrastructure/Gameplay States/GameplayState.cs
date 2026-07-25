@@ -9,10 +9,12 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure.Gameplay_States
 		{
 
 		}
+
 		public void OnExit (IStateMachine<GameplayBootstrap, GameplayTriggers> machine)
 		{
 
 		}
+
 		public void Tick (IStateMachine<GameplayBootstrap, GameplayTriggers> machine, float deltaTime)
 		{
 

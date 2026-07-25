@@ -33,6 +33,15 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 		private void Update ()
 		{
 			_stateMachine.Tick(Time.deltaTime);
+
+			if (Physics.Raycast(_player.Camera.transform.position, _player.Camera.transform.forward, out RaycastHit hit, 2.5f, LayerMask.GetMask("Entrance")))
+			{
+				_isBeingPacified = hit.collider.gameObject == gameObject;
+			}
+			else
+			{
+				_isBeingPacified = false;
+			}
 		}
 
 		public override void Activate ()
@@ -52,22 +61,17 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 			            .AllowTransition<ClosetIdleState>(EntranceTriggers.Idle)
 			            .AllowTransition<ClosetBreachState>(EntranceTriggers.Breach);
 
-			stateMachine.AddState<ClosetBreachState>();
+			stateMachine.AddState<ClosetBreachState>()
+			            .AllowTransition<ClosetIdleState>(EntranceTriggers.Idle);
 
 			stateMachine.Start();
 
 			return stateMachine;
 		}
 
-		private void OnMouseDown ()
+		public override void Reset ()
 		{
-			_isBeingPacified = true;
-		}
-
-		private void OnMouseUp ()
-		{
-			// TODO: убедиться что работает корректно, если мышь отпущена за пределами коллайдера
-			_isBeingPacified = false;
+			_stateMachine.Fire(EntranceTriggers.Idle);
 		}
 
 		public void Breach ()

@@ -9,6 +9,8 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 		public abstract event Action<IBreachSource> Breached;
 
 		public abstract void Activate ();
+
+		public abstract void Reset ();
 	}
 
 	public interface IBreachSource
@@ -16,5 +18,7 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 		event Action<IBreachSource> Breached;
 
 		void Activate ();
+
+		void Reset ();
 	}
 }

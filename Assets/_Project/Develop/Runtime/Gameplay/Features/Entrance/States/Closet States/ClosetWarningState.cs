@@ -29,8 +29,11 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Closet_Stat
 				_pacifyTimer -= deltaTime;
 			} else
 			{
-				_breachTimer -= deltaTime;
-				_pacifyTimer = machine.Context.PacifyTime;
+				if (!machine.Context.Player.CanNotAct)
+				{
+					_breachTimer -= deltaTime;
+				}
+				_pacifyTimer =  machine.Context.PacifyTime;
 			}
 
 			if (_pacifyTimer <= 0)

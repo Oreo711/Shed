@@ -6,6 +6,8 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Closet_Stat
 {
 	public class ClosetBreachState : IState<Closet, EntranceTriggers>
 	{
+		private IStateMachine<Closet, EntranceTriggers> _machine;
+
 		public void OnEnter (IStateMachine<Closet, EntranceTriggers> machine)
 		{
 			Closet closet = machine.Context;
@@ -13,10 +15,22 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Closet_Stat
 			closet.Breach();
 			closet.Door.rotation = Quaternion.Euler(0, 120, 0);
 
-			Debug.Log("Died to closet");
+			_machine = machine;
+
+			machine.Context.Player.HitGunshot += OnHitGunshot;
 		}
 
-		public void OnExit (IStateMachine<Closet, EntranceTriggers> machine) {}
+		private void OnHitGunshot ()
+		{
+			_machine.Fire(EntranceTriggers.Idle);
+		}
+
+		public void OnExit (IStateMachine<Closet, EntranceTriggers> machine)
+		{
+			machine.Context.transform.rotation = Quaternion.Euler(0, 0, 0);
+
+			machine.Context.Player.HitGunshot -= OnHitGunshot;
+		}
 
 		public void Tick (IStateMachine<Closet, EntranceTriggers> machine, float deltaTime) {}
 	}

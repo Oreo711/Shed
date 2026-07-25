@@ -4,6 +4,7 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure
 	{
 		Gameplay,
 		Win,
+		Gunshot,
 		Loss
 	}
 }

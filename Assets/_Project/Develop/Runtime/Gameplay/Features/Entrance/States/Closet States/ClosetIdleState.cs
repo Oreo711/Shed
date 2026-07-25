@@ -8,7 +8,7 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Closet_Stat
 	{
 		public void OnEnter (IStateMachine<Closet, EntranceTriggers> machine)
 		{
-
+			machine.Context.transform.rotation = Quaternion.Euler(0, 0, 0);
 		}
 
 		public void OnExit (IStateMachine<Closet, EntranceTriggers> machine)

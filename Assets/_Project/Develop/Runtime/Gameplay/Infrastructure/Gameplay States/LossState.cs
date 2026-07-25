@@ -1,4 +1,5 @@
 using Modules.StateMachineLite.Develop.Runtime.Modules.State_Machine;
+using UnityEngine;
 
 
 namespace _Project.Develop.Runtime.Gameplay.Infrastructure.Gameplay_States
@@ -8,12 +9,15 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure.Gameplay_States
 	{
 		public void OnEnter (IStateMachine<GameplayBootstrap, GameplayTriggers> machine)
 		{
-
+			machine.Context.Player.SetActive(false);
+			Debug.Log("You Lose.");
 		}
+
 		public void OnExit (IStateMachine<GameplayBootstrap, GameplayTriggers> machine)
 		{
 
 		}
+
 		public void Tick (IStateMachine<GameplayBootstrap, GameplayTriggers> machine, float deltaTime)
 		{
 

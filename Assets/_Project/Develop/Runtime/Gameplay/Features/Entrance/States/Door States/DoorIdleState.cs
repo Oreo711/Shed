@@ -8,7 +8,7 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Door_States
 	{
 		public void OnEnter (IStateMachine<Door, EntranceTriggers> machine)
 		{
-			Debug.Log("They have left the door.");
+			machine.Context.transform.rotation = Quaternion.Euler(0, 0, 0);
 		}
 
 		public void OnExit (IStateMachine<Door, EntranceTriggers> machine)
@@ -18,10 +18,7 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Door_States
 
 		public void Tick (IStateMachine<Door, EntranceTriggers> machine, float deltaTime)
 		{
-			if (Input.GetKeyDown(KeyCode.X))
-			{
-				machine.Fire(EntranceTriggers.Warning);
-			}
+
 		}
 	}
 }
