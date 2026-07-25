@@ -25,6 +25,7 @@ namespace _Project.Develop.Runtime.UI.Gameplay
 		{
 			_screen.DisableRechargeBar();
 			_screen.DisableClock();
+			_screen.DisableInteractGuide();
 		}
 
 		public void Update (float deltaTime)
@@ -41,8 +42,7 @@ namespace _Project.Develop.Runtime.UI.Gameplay
 			if (player.IsFacingClock)
 			{
 				_screen.EnableClock();
-			}
-			else
+			} else
 			{
 				_screen.DisableClock();
 			}
@@ -52,13 +52,19 @@ namespace _Project.Develop.Runtime.UI.Gameplay
 				_screen.EnableRechargeBar();
 
 				_screen.SetRechargeBarPercentage((player.Flashlight.RechargeTime - player.RemainingRechargeTime) / player.Flashlight.RechargeTime);
-			}
-			else
+			} else
 			{
 				_screen.DisableRechargeBar();
 			}
 
-
+			if (player.IsFacingBatteryBox || player.IsFacingClock)
+			{
+				_screen.EnableInteractGuide();
+			}
+			else
+			{
+				_screen.DisableInteractGuide();
+			}
 		}
 
 		public void Dispose()

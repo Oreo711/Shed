@@ -29,6 +29,8 @@ namespace _Project.Develop.Runtime.Gameplay.Features
         public Flashlight            Flashlight            => _flashlight;
         public Gun                   Gun                   => _gun;
         public bool                  CanNotAct             {get; set;}
+        public bool                  IsFacingBatteryBox    {get; private set;}
+        public bool                  IsFacingCloset        {get; set;}
 
 
         public event Action HitGunshot;
@@ -65,6 +67,11 @@ namespace _Project.Develop.Runtime.Gameplay.Features
 
                 if (hit.collider == _batteryBox && (_batteryBox.transform.position - transform.position).magnitude <= 2.5f)
                 {
+                    if (!IsRecharging)
+                    {
+                        IsFacingBatteryBox = true;
+                    }
+
                     if (Input.GetKeyDown(KeyCode.E) || IsRecharging)
                     {
                         if (!IsRecharging)
@@ -84,10 +91,18 @@ namespace _Project.Develop.Runtime.Gameplay.Features
                 }
                 else
                 {
+                    IsFacingBatteryBox            = false;
                     _isRecharging          = false;
                     _remainingRechargeTime = _flashlight.RechargeTime;
                     _flashlight.StopRechargeSound();
                 }
+            } else
+            {
+                IsFacingBatteryBox     = false;
+                _isRecharging          = false;
+                _isFacingClock         = false;
+                _remainingRechargeTime = _flashlight.RechargeTime;
+                _flashlight.StopRechargeSound();
             }
         }
 

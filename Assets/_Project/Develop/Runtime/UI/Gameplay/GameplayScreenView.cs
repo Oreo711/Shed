@@ -9,9 +9,10 @@ namespace _Project.Develop.Runtime.UI.Gameplay
 {
     public class GameplayScreenView : MonoBehaviour, IView
     {
-        [SerializeField] private Slider   _battery;
-        [SerializeField] private TMP_Text _clock;
-        [SerializeField] private Slider   _rechargeBar;
+        [SerializeField] private Slider     _battery;
+        [SerializeField] private TMP_Text   _clock;
+        [SerializeField] private Slider     _rechargeBar;
+        [SerializeField] private GameObject _interactGuide;
 
         public void SetClock (int hours, int minutes)
         {
@@ -35,5 +36,9 @@ namespace _Project.Develop.Runtime.UI.Gameplay
         public void EnableClock() => _clock.gameObject.SetActive(true);
 
         public void DisableClock() => _clock.gameObject.SetActive(false);
+
+        public void EnableInteractGuide() => _interactGuide.gameObject.SetActive(true);
+
+        public void DisableInteractGuide() => _interactGuide.gameObject.SetActive(false);
     }
 }

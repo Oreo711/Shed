@@ -36,7 +36,27 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 
 			if (Physics.Raycast(_player.Camera.transform.position, _player.Camera.transform.forward, out RaycastHit hit, 2.5f, LayerMask.GetMask("Entrance")))
 			{
-				_isBeingPacified = hit.collider.gameObject == gameObject;
+				if (hit.collider.gameObject == gameObject)
+				{
+					if (Input.GetKeyDown(KeyCode.E) || _isBeingPacified)
+					{
+						if (!_isBeingPacified)
+						{
+							_isBeingPacified = true;
+						}
+
+						_player.IsFacingCloset = false;
+					}
+					else
+					{
+						_player.IsFacingCloset = true;
+					}
+
+					if (Input.GetKeyUp(KeyCode.E))
+					{
+						_isBeingPacified = false;
+					}
+				}
 			}
 			else
 			{
