@@ -6,34 +6,19 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Door_States
 {
 	public class DoorBreachState : IState<Door, EntranceTriggers>
 	{
-		private IStateMachine<Door, EntranceTriggers> _machine;
-
 		public void OnEnter (IStateMachine<Door, EntranceTriggers> machine)
 		{
-			machine.Context.Breach();
-
-			machine.Context.transform.rotation = Quaternion.Euler(0, 80, 0);
-
-			_machine = machine;
-
-			machine.Context.Player.HitGunshot += OnHitGunshot;
-		}
-
-		private void OnHitGunshot ()
-		{
-			_machine.Fire(EntranceTriggers.Idle);
+			Door door = machine.Context;
+			door.Breach();
+			door.transform.rotation = Quaternion.Euler(0, 80, 0);
 		}
 
 		public void OnExit (IStateMachine<Door, EntranceTriggers> machine)
 		{
-			machine.Context.transform.rotation = Quaternion.Euler(0, 0, 0);
-
-			machine.Context.Player.HitGunshot -= OnHitGunshot;
+			Door door = machine.Context;
+			door.transform.rotation = Quaternion.Euler(0, 0, 0);
 		}
 
-		public void Tick (IStateMachine<Door, EntranceTriggers> machine, float deltaTime)
-		{
-
-		}
+		public void Tick (IStateMachine<Door, EntranceTriggers> machine, float deltaTime) {}
 	}
 }

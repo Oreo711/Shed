@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 {
-	public class Window : BreachSource, IStateContext
+	public class Window : BreachSource<Window>, IStateContext
 	{
 		[SerializeField] private Player _player;
 		[SerializeField] private float  _breachTime;
@@ -16,18 +16,16 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 		public float  BreachTime => _breachTime;
 		public float  PacifyTime => _pacifyTime;
 
-		private StateMachine<Window, EntranceTriggers> _stateMachine;
-
-		public override event Action<IBreachSource> Breached;
+		public override event Action<BreachSourceBase> Breached;
 
 		private void Awake ()
 		{
-			_stateMachine = BuildStateMachine();
+			StateMachine = BuildStateMachine();
 		}
 
 		private void Update ()
 		{
-			_stateMachine?.Tick(Time.deltaTime);
+			StateMachine.Tick(Time.deltaTime);
 		}
 
 		private StateMachine<Window, EntranceTriggers> BuildStateMachine ()
@@ -52,12 +50,7 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 
 		public override void Activate ()
 		{
-			_stateMachine.Fire(EntranceTriggers.Warning);
-		}
-
-		public override void Reset ()
-		{
-			_stateMachine.Fire(EntranceTriggers.Idle);
+			StateMachine.Fire(EntranceTriggers.Warning);
 		}
 
 		public void Breach ()

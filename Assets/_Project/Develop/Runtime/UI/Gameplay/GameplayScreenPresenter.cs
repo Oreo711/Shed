@@ -8,31 +8,31 @@ namespace _Project.Develop.Runtime.UI.Gameplay
 	{
 		private readonly GameplayScreenView  _screen;
 		private readonly PlayerHolderService _playerHolderService;
-		private readonly Timer               _timer;
+		private readonly GameTimer           _gameTimer;
 
-		public GameplayScreenPresenter(
+		public GameplayScreenPresenter (
 			GameplayScreenView screen,
 			PlayerHolderService playerHolderService,
-			Timer timer
+			GameTimer gameTimer
 		)
 		{
 			_screen              = screen;
 			_playerHolderService = playerHolderService;
-			_timer               = timer;
+			_gameTimer           = gameTimer;
 		}
 
-		public void Initialize()
+		public void Initialize ()
 		{
 			_screen.DisableRechargeBar();
 			_screen.DisableClock();
 			_screen.DisableInteractGuide();
 		}
 
-		public void Update (float deltaTime)
+		public void Tick ()
 		{
 			Player player = _playerHolderService.Player;
 
-			_screen.SetClock(_timer.Hours, _timer.Minutes);
+			_screen.SetClock(_gameTimer.Hours, _gameTimer.Minutes);
 
 			if (player)
 			{
@@ -60,16 +60,12 @@ namespace _Project.Develop.Runtime.UI.Gameplay
 			if (player.IsFacingBatteryBox || player.IsFacingClock)
 			{
 				_screen.EnableInteractGuide();
-			}
-			else
+			} else
 			{
 				_screen.DisableInteractGuide();
 			}
 		}
 
-		public void Dispose()
-		{
-
-		}
+		public void Dispose () {}
 	}
 }

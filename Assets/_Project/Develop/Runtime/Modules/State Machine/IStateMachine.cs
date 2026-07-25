@@ -11,7 +11,7 @@ namespace Modules.StateMachineLite.Develop.Runtime.Modules.State_Machine
 	///     machine that drives them.
 	/// </summary>
 	[PublicAPI]
-	public interface IStateMachine<TContext, TTrigger>
+	public interface IStateMachine<out TContext, in TTrigger>
 		where TContext : class, IStateContext
 		where TTrigger : struct, Enum
 	{

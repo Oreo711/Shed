@@ -1,0 +1,37 @@
+using Modules.StateMachineLite.Develop.Runtime.Modules.State_Machine;
+using UnityEngine;
+
+
+namespace _Project.Develop.Runtime.Gameplay.Infrastructure.GameplayStates
+{
+	public class JumpScareState : IState<GameplayContext, GameplayTriggers>
+	{
+		private const float TimeToShoot = 0.8f;
+
+		private float _timeout;
+
+		public void OnEnter (IStateMachine<GameplayContext, GameplayTriggers> machine)
+		{
+			_timeout = TimeToShoot;
+			Debug.Log("PRESS X TO SHOOT!");
+		}
+
+		public void OnExit (IStateMachine<GameplayContext, GameplayTriggers> machine) {}
+
+		public void Tick (IStateMachine<GameplayContext, GameplayTriggers> machine, float deltaTime)
+		{
+			if (Input.GetKeyDown(KeyCode.X) && machine.Context.TryShoot())
+			{
+				machine.Fire(GameplayTriggers.Gameplay);
+				return;
+			}
+
+			_timeout -= deltaTime;
+
+			if (_timeout <= 0)
+			{
+				machine.Context.Lose();
+			}
+		}
+	}
+}

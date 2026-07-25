@@ -1,4 +1,3 @@
-using System;
 using _Project.Develop.Runtime.UI.Core;
 using TMPro;
 using UnityEngine;

@@ -1,9 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using _Project.Develop.Runtime.Utilities.CoroutineManagement;
-using UnityEngine;
 using Random = UnityEngine.Random;
 
 
@@ -11,11 +8,10 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 {
 	public class EntranceActivatorService
 	{
-		private readonly Timer                          _timer;
-		private readonly ICoroutinePerformer            _coroutinePerformer;
-		private readonly Dictionary<IBreachSource, int> _aggressionValues = new();
+		private readonly GameTimer                         _gameTimer;
+		private readonly Dictionary<BreachSourceBase, int> _aggressionValues = new();
 
-		private List<IBreachSource> _breachSources;
+		private List<BreachSourceBase> _breachSources;
 
 		private const float IntervalScale = 0.85f;
 
@@ -23,20 +19,20 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 		private float _minInterval = 10;
 		private float _maxInterval = 15;
 
-		private Coroutine _aggressionLoop;
-		private Coroutine _activationLoop;
+		public event Action<BreachSourceBase> EntranceBreached;
 
-		public event Action<IBreachSource> EntranceBreached;
+		private Ticker _aggressionTicker = new Ticker(1.0f);
+		private Ticker _breachActivationTicker;
 
-		public EntranceActivatorService (Timer timer, ICoroutinePerformer coroutinePerformer)
+		public EntranceActivatorService (GameTimer gameTimer)
 		{
-			_timer              = timer;
-			_coroutinePerformer = coroutinePerformer;
+			_gameTimer              = gameTimer;
+			_breachActivationTicker = new Ticker(_maxInterval);
 		}
 
-		public void Initialize (IReadOnlyList<IBreachSource> breachSources)
+		public void Initialize (IReadOnlyList<BreachSourceBase> breachSources)
 		{
-			foreach (IBreachSource breachSource in breachSources)
+			foreach (BreachSourceBase breachSource in breachSources)
 			{
 				_aggressionValues.Add(breachSource, 0);
 				breachSource.Breached += HandleBreach;
@@ -49,10 +45,36 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 		{
 			_isRunning = true;
 
-			_aggressionLoop = _coroutinePerformer.StartCoroutine(IncreaseAggressionLoop());
-			_activationLoop = _coroutinePerformer.StartCoroutine(BreachActivationLoop());
+			_gameTimer.HourPassed += ScaleInterval;
+		}
 
-			_timer.HourPassed += ScaleInterval;
+		public void Tick (float deltaTime)
+		{
+			if (!_isRunning)
+				return;
+
+			_aggressionTicker.DoNonAlloc(
+				this,
+				static service => service.AdvanceAggression(),
+				deltaTime
+			);
+
+			if (_breachActivationTicker.Tick(deltaTime) > 0)
+			{
+				ActivateBreach();
+				float interval = Random.Range(_minInterval, _maxInterval);
+				_breachActivationTicker = new Ticker(interval);
+			}
+		}
+
+		public void Pause ()
+		{
+			_isRunning = false;
+		}
+
+		public void Resume ()
+		{
+			_isRunning = true;
 		}
 
 		private void ScaleInterval ()
@@ -61,63 +83,35 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 			_maxInterval *= IntervalScale;
 		}
 
-		private IEnumerator BreachActivationLoop ()
-		{
-			yield return new WaitForSeconds(_maxInterval);
-
-			while (_isRunning)
-			{
-				IBreachSource breachSource = GetSourceWithHighestAggression();
-				ActivateBreachSource(breachSource);
-
-				float interval = Random.Range(_minInterval, _maxInterval);
-				yield return new WaitForSeconds(interval);
-			}
-		}
-
-		private void ActivateBreachSource (IBreachSource breachSource)
+		private void ActivateBreachSource (BreachSourceBase breachSource)
 		{
 			_aggressionValues[breachSource] = 0;
 			breachSource.Activate();
 		}
 
-		private IEnumerator IncreaseAggressionLoop ()
+		private void AdvanceAggression ()
 		{
-			while (_isRunning)
-			{
-				yield return new WaitForSeconds(1);
+			int aggression = Random.Range(1, 101);
+			int index      = Random.Range(0, _breachSources.Count);
 
-				int aggression = Random.Range(1, 101);
+			BreachSourceBase breachSource = _breachSources[index];
 
-				int           index        = Random.Range(0, _breachSources.Count);
-				IBreachSource breachSource = _breachSources[index];
+			_aggressionValues[breachSource] += aggression;
+		}
 
-				_aggressionValues[breachSource] += aggression;
-			}
+		private void ActivateBreach ()
+		{
+			BreachSourceBase breachSource = GetSourceWithHighestAggression();
+			ActivateBreachSource(breachSource);
 		}
 
 		public void Stop ()
 		{
-			if (_aggressionLoop != null)
-			{
-				_coroutinePerformer.StopCoroutine(_aggressionLoop);
-			}
-
-			if (_activationLoop != null)
-			{
-				_coroutinePerformer.StopCoroutine(_activationLoop);
-			}
-
 			_isRunning = false;
 
-			Teardown();
-		}
+			_gameTimer.HourPassed -= ScaleInterval;
 
-		private void Teardown ()
-		{
-			_timer.HourPassed -= ScaleInterval;
-
-			foreach (IBreachSource breachSource in _aggressionValues.Keys)
+			foreach (BreachSourceBase breachSource in _aggressionValues.Keys)
 			{
 				breachSource.Breached -= HandleBreach;
 			}
@@ -125,18 +119,18 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 			_aggressionValues.Clear();
 		}
 
-		private void HandleBreach (IBreachSource breachSource)
+		private void HandleBreach (BreachSourceBase breachSource)
 		{
 			EntranceBreached?.Invoke(breachSource);
 		}
 
-		private IBreachSource GetSourceWithHighestAggression ()
+		private BreachSourceBase GetSourceWithHighestAggression ()
 		{
-			IBreachSource breachSource = null; // not possible to get null if aggression meters are initialized correctly
+			BreachSourceBase breachSource = null; // not possible to get null if aggression meters are initialized correctly
 
 			int aggression = -1;
 
-			foreach (KeyValuePair<IBreachSource, int> aggressionMeter in _aggressionValues)
+			foreach (KeyValuePair<BreachSourceBase, int> aggressionMeter in _aggressionValues)
 			{
 				if (aggressionMeter.Value > aggression)
 				{

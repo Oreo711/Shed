@@ -6,14 +6,12 @@ using UnityEngine;
 
 namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 {
-	public class Closet : BreachSource, IStateContext
+	public class Closet : BreachSource<Closet>, IStateContext
 	{
 		[SerializeField] private Player    _player;
 		[SerializeField] private Transform _door;
 		[SerializeField] private float     _breachTime;
 		[SerializeField] private float     _pacifyTime;
-
-		private StateMachine<Closet, EntranceTriggers> _stateMachine;
 
 		private bool _isBeingPacified;
 
@@ -23,16 +21,16 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 		public float     PacifyTime      => _pacifyTime;
 		public bool      IsBeingPacified => _isBeingPacified;
 
-		public override event Action<IBreachSource> Breached;
+		public override event Action<BreachSourceBase> Breached;
 
 		private void Awake ()
 		{
-			_stateMachine = BuildStateMachine();
+			StateMachine = BuildStateMachine();
 		}
 
 		private void Update ()
 		{
-			_stateMachine.Tick(Time.deltaTime);
+			StateMachine.Tick(Time.deltaTime);
 
 			if (Physics.Raycast(_player.Camera.transform.position, _player.Camera.transform.forward, out RaycastHit hit, 2.5f, LayerMask.GetMask("Entrance")))
 			{
@@ -46,8 +44,7 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 						}
 
 						_player.IsFacingCloset = false;
-					}
-					else
+					} else
 					{
 						_player.IsFacingCloset = true;
 					}
@@ -57,8 +54,7 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 						_isBeingPacified = false;
 					}
 				}
-			}
-			else
+			} else
 			{
 				_isBeingPacified = false;
 			}
@@ -66,7 +62,7 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 
 		public override void Activate ()
 		{
-			_stateMachine.Fire(EntranceTriggers.Warning);
+			StateMachine.Fire(EntranceTriggers.Warning);
 		}
 
 		private StateMachine<Closet, EntranceTriggers> BuildStateMachine ()
@@ -87,11 +83,6 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 			stateMachine.Start();
 
 			return stateMachine;
-		}
-
-		public override void Reset ()
-		{
-			_stateMachine.Fire(EntranceTriggers.Idle);
 		}
 
 		public void Breach ()

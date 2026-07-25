@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 {
-	public class Door : BreachSource, IStateContext
+	public class Door : BreachSource<Door>, IStateContext
 	{
 		[SerializeField] private Player      _player;
 		[SerializeField] private float       _preparationTime;
@@ -14,9 +14,7 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 		[SerializeField] private AudioSource _openSound;
 		[SerializeField] private AudioSource _closeSound;
 
-		private StateMachine<Door, EntranceTriggers> _stateMachine;
-
-		public override event Action<IBreachSource> Breached;
+		public override event Action<BreachSourceBase> Breached;
 
 		public Player Player          => _player;
 		public float  PreparationTime => _preparationTime;
@@ -24,12 +22,12 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 
 		private void Awake ()
 		{
-			_stateMachine = BuildStateMachine();
+			StateMachine = BuildStateMachine();
 		}
 
 		private void Update ()
 		{
-			_stateMachine?.Tick(Time.deltaTime);
+			StateMachine.Tick(Time.deltaTime);
 		}
 
 		private StateMachine<Door, EntranceTriggers> BuildStateMachine ()
@@ -54,7 +52,7 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 
 		public override void Activate ()
 		{
-			_stateMachine.Fire(EntranceTriggers.Warning);
+			StateMachine.Fire(EntranceTriggers.Warning);
 		}
 
 		public void PlayOpenSound ()
@@ -65,11 +63,6 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 		public void PlayCloseSound ()
 		{
 			_closeSound.Play();
-		}
-
-		public override void Reset ()
-		{
-			_stateMachine.Fire(EntranceTriggers.Idle);
 		}
 
 		public void Breach ()

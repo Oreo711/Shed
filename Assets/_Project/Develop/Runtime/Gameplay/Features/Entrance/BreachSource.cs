@@ -1,24 +1,26 @@
 using System;
+using Modules.StateMachineLite.Develop.Runtime.Modules.State_Machine;
 using UnityEngine;
 
 
 namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 {
-	public abstract class BreachSource : MonoBehaviour, IBreachSource
+	public abstract class BreachSourceBase : MonoBehaviour
 	{
-		public abstract event Action<IBreachSource> Breached;
+		public abstract event Action<BreachSourceBase> Breached;
 
 		public abstract void Activate ();
-
-		public abstract void Reset ();
+		public abstract void HandleGunshot ();
 	}
 
-	public interface IBreachSource
+	public abstract class BreachSource<TDerived> : BreachSourceBase
+		where TDerived : BreachSource<TDerived>, IStateContext
 	{
-		event Action<IBreachSource> Breached;
+		protected StateMachine<TDerived, EntranceTriggers> StateMachine;
 
-		void Activate ();
-
-		void Reset ();
+		public override void HandleGunshot ()
+		{
+			StateMachine.Fire(EntranceTriggers.Idle);
+		}
 	}
 }
