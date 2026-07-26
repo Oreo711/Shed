@@ -2585,10 +2585,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::_Project.Develop.Runtime.Gameplay.Infrastructure.GameplayBootstrap
   _breachSources:
   - {fileID: 203877358}
+  - {fileID: 6765064556507913324}
+  - {fileID: 783669753}
+  - {fileID: 4292431288143464811}
   _player: {fileID: 1523328362}
   _gun: {fileID: 802800811}
   _clock: {fileID: 2108391891}
-  _jumpScareSpot: {fileID: 0}
 --- !u!4 &978571395
 Transform:
   m_ObjectHideFlags: 0

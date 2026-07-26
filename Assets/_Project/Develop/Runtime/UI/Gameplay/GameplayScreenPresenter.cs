@@ -88,7 +88,7 @@ namespace Shed.Runtime.UI.Gameplay
 			if (player.HeardKnocking && !player.MonologueMilestones.HasHeardKnocking)
 			{
 				_screen.QueueMonologueText(
-					"One of them is knocking on the door.. If it opens it, I'll have to turn off the flashlight and stay quiet, it might leave if I do.");
+					"One of them is knocking on the door..\nIf it opens it, I'll have to turn off the flashlight and stay quiet, it might leave if I do.");
 				player.MonologueMilestones.HasHeardKnocking = true;
 			}
 
