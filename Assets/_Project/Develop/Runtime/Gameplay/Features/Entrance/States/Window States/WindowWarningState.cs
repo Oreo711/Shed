@@ -11,17 +11,21 @@ namespace Shed.Runtime.Gameplay.Features.Entrance.States.Window_States
 
 		public void OnEnter (IStateMachine<Window, EntranceTriggers> machine)
 		{
-			_breachTimer = machine.Context.BreachTime;
-			_pacifyTimer = machine.Context.PacifyTime;
+			Window window = machine.Context;
 
-			machine.Context.Player.EncounteredWindow = true;
+			_breachTimer = window.BreachTime;
+			_pacifyTimer = window.PacifyTime;
 
-			machine.Context.transform.rotation = Quaternion.Euler(0, -25, 0);
+			window.Player.EncounteredWindow = true;
+			window.transform.rotation       = Quaternion.Euler(0, -25, 0);
+			window.ShowHint();
 		}
 
 		public void OnExit (IStateMachine<Window, EntranceTriggers> machine)
 		{
-			machine.Context.transform.rotation = Quaternion.Euler(0, 0, 0);
+			Window context = machine.Context;
+			context.transform.rotation = Quaternion.Euler(0, 0, 0);
+			context.HideHint();
 		}
 
 		public void Tick (IStateMachine<Window, EntranceTriggers> machine, float deltaTime)
@@ -39,17 +43,16 @@ namespace Shed.Runtime.Gameplay.Features.Entrance.States.Window_States
 				if (hit.collider.gameObject == window.gameObject && window.Player.IsUsingFlashlight)
 				{
 					_pacifyTimer -= deltaTime;
-				}
-				else
+				} else
 				{
 					if (!machine.Context.Player.CanNotAct)
 					{
 						_breachTimer -= deltaTime;
 					}
-					_pacifyTimer =  machine.Context.PacifyTime;
+
+					_pacifyTimer = machine.Context.PacifyTime;
 				}
-			}
-			else
+			} else
 			{
 				_breachTimer -= deltaTime;
 				_pacifyTimer =  machine.Context.PacifyTime;

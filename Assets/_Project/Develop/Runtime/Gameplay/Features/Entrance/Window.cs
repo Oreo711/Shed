@@ -1,6 +1,7 @@
 using System;
 using Modules.StateMachineLite.Develop.Runtime.Modules.State_Machine;
 using Shed.Runtime.Gameplay.Features.Entrance.States.Window_States;
+using Shed.Runtime.Gameplay.Hints;
 using UnityEngine;
 
 
@@ -8,9 +9,10 @@ namespace Shed.Runtime.Gameplay.Features.Entrance
 {
 	public class Window : BreachSource<Window>, IStateContext
 	{
-		[SerializeField] private Player _player;
-		[SerializeField] private float  _breachTime;
-		[SerializeField] private float  _pacifyTime;
+		[SerializeField] private Player           _player;
+		[SerializeField] private float            _breachTime;
+		[SerializeField] private float            _pacifyTime;
+		[SerializeField] private BreachSourceHint _breachSourceHint;
 
 		public Player Player     => _player;
 		public float  BreachTime => _breachTime;
@@ -51,6 +53,16 @@ namespace Shed.Runtime.Gameplay.Features.Entrance
 		public override void Activate ()
 		{
 			StateMachine.Fire(EntranceTriggers.Warning);
+		}
+
+		public void ShowHint ()
+		{
+			_breachSourceHint.Show();
+		}
+
+		public void HideHint ()
+		{
+			_breachSourceHint.Hide();
 		}
 
 		public void Breach ()
