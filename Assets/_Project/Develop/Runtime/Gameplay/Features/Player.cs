@@ -13,21 +13,31 @@ namespace _Project.Develop.Runtime.Gameplay.Features
 		[SerializeField] private Collider _batteryBox;
 		[SerializeField] private Collider _clock;
 
+		[HideInInspector] public bool HeardKnocking;
+		[HideInInspector] public bool EncounteredDoor;
+		[HideInInspector] public bool EncounteredWindow;
+		[HideInInspector] public bool EncounteredCloset;
+		[HideInInspector] public bool IsLowOnBattery;
+		[HideInInspector] public bool Shot;
+
 		private bool  _isRecharging;
 		private float _remainingRechargeTime;
 		private bool  _isFacingClock;
 		private bool  _isActive = true;
 
-		public bool       IsWalking             => _controller.IsWalking;
-		public bool       IsUsingFlashlight     => _flashlight.IsOn;
-		public bool       IsRecharging          => _isRecharging;
-		public bool       IsFacingClock         => _isFacingClock;
-		public float      RemainingRechargeTime => _remainingRechargeTime;
-		public Camera     Camera                => _camera;
-		public Flashlight Flashlight            => _flashlight;
-		public bool       CanNotAct             {get; set;}
-		public bool       IsFacingBatteryBox    {get; private set;}
-		public bool       IsFacingCloset        {get; set;}
+		private readonly MonologueMilestones _monologueMilestones = new();
+
+		public bool                IsWalking             => _controller.IsWalking;
+		public bool                IsUsingFlashlight     => _flashlight.IsOn;
+		public bool                IsRecharging          => _isRecharging;
+		public bool                IsFacingClock         => _isFacingClock;
+		public float               RemainingRechargeTime => _remainingRechargeTime;
+		public Camera              Camera                => _camera;
+		public Flashlight          Flashlight            => _flashlight;
+		public MonologueMilestones MonologueMilestones   => _monologueMilestones;
+		public bool                CanNotAct             {get; set;}
+		public bool                CanUseBatteryBox      {get; private set;}
+		public bool                CanUseCloset          {get; set;}
 
 		private void Awake ()
 		{
@@ -49,26 +59,27 @@ namespace _Project.Develop.Runtime.Gameplay.Features
 				_flashlight.Toggle();
 			}
 
+			if (_flashlight.BatteryPercentage <= 30)
+			{
+				IsLowOnBattery = true;
+			}
+
 			if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out RaycastHit hit))
 			{
 				if (hit.collider == _clock && (_clock.transform.position - transform.position).magnitude <= 7f)
 				{
 					_isFacingClock = true;
-				} else
+				}
+				else
 				{
 					_isFacingClock = false;
 				}
 
 				if (hit.collider == _batteryBox && (_batteryBox.transform.position - transform.position).magnitude <= 2.5f)
 				{
-					if (!IsRecharging)
+					if (Input.GetKeyDown(KeyCode.E) || _isRecharging)
 					{
-						IsFacingBatteryBox = true;
-					}
-
-					if (Input.GetKeyDown(KeyCode.E) || IsRecharging)
-					{
-						if (!IsRecharging)
+						if (!_isRecharging)
 						{
 							_isRecharging = true;
 							_flashlight.PlayRechargeSound();
@@ -82,16 +93,26 @@ namespace _Project.Develop.Runtime.Gameplay.Features
 							_isRecharging = false;
 						}
 					}
-				} else
+
+					if (Input.GetKeyUp(KeyCode.E))
+					{
+						_isRecharging          = false;
+						_remainingRechargeTime = _flashlight.RechargeTime;
+					}
+
+					CanUseBatteryBox = !_isRecharging;
+				}
+				else
 				{
-					IsFacingBatteryBox     = false;
+					CanUseBatteryBox     = false;
 					_isRecharging          = false;
 					_remainingRechargeTime = _flashlight.RechargeTime;
 					_flashlight.StopRechargeSound();
 				}
-			} else
+			}
+			else
 			{
-				IsFacingBatteryBox     = false;
+				CanUseBatteryBox       = false;
 				_isRecharging          = false;
 				_isFacingClock         = false;
 				_remainingRechargeTime = _flashlight.RechargeTime;

@@ -31,6 +31,8 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure
 
 		private bool _isRunning;
 
+		public Player Player => _player;
+
 		public override void ProcessRegistrations (DIContainer container)
 		{
 			_container = container;

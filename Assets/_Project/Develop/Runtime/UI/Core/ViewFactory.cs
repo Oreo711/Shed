@@ -13,7 +13,8 @@ namespace _Project.Develop.Runtime.UI.Core
 
         private readonly Dictionary<string, string> _viewIDToResourcesPath = new Dictionary<string, string>()
         {
-            {ViewIDs.GameplayScreen, "UI/Gameplay/Gameplay Screen View"}
+            {ViewIDs.GameplayScreen, "UI/Gameplay/Gameplay Screen View"},
+            {ViewIDs.MainMenuScreen, "UI/Meta/Main Menu Screen View"},
         };
 
         public ViewFactory(ResourcesAssetLoader resourcesAssetsLoader)

@@ -14,7 +14,9 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Closet_Stat
 			_breachTimer = machine.Context.BreachTime;
 			_pacifyTimer = machine.Context.PacifyTime;
 
-			machine.Context.Door.rotation = Quaternion.Euler(0, 20, 0);
+			machine.Context.Player.EncounteredCloset = true;
+
+			machine.Context.Door.localRotation = Quaternion.Euler(0, 20, 0);
 		}
 
 		public void OnExit (IStateMachine<Closet, EntranceTriggers> machine)

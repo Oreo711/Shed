@@ -42,21 +42,24 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 						{
 							_isBeingPacified = true;
 						}
-
-						_player.IsFacingCloset = false;
-					} else
-					{
-						_player.IsFacingCloset = true;
 					}
 
 					if (Input.GetKeyUp(KeyCode.E))
 					{
 						_isBeingPacified = false;
 					}
+
+					_player.CanUseCloset = !_isBeingPacified;
 				}
-			} else
+				else
+				{
+					_player.CanUseCloset = false;
+				}
+			}
+			else
 			{
 				_isBeingPacified = false;
+				_player.CanUseCloset = false;
 			}
 		}
 

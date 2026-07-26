@@ -11,7 +11,7 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Closet_Stat
 			Closet closet = machine.Context;
 
 			closet.Breach();
-			closet.Door.rotation = Quaternion.Euler(0, 120, 0);
+			closet.Door.localRotation = Quaternion.Euler(0, 120, 0);
 		}
 
 		public void OnExit (IStateMachine<Closet, EntranceTriggers> machine)

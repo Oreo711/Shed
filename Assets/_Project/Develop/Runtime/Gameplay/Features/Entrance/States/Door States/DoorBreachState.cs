@@ -10,15 +10,17 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Door_States
 		{
 			Door door = machine.Context;
 			door.Breach();
-			door.transform.rotation = Quaternion.Euler(0, 80, 0);
+			door.transform.rotation = Quaternion.Euler(0, 170, 90);
 		}
 
 		public void OnExit (IStateMachine<Door, EntranceTriggers> machine)
 		{
-			Door door = machine.Context;
-			door.transform.rotation = Quaternion.Euler(0, 0, 0);
+			
 		}
 
-		public void Tick (IStateMachine<Door, EntranceTriggers> machine, float deltaTime) {}
+		public void Tick (IStateMachine<Door, EntranceTriggers> machine, float deltaTime)
+		{
+
+		}
 	}
 }

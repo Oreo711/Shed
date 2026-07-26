@@ -13,11 +13,11 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 
 		private List<BreachSourceBase> _breachSources;
 
-		private const float IntervalScale = 0.85f;
+		private const float IntervalScale = 0.9f;
 
 		private bool  _isRunning;
-		private float _minInterval = 10;
-		private float _maxInterval = 15;
+		private float _minInterval = 12;
+		private float _maxInterval = 18;
 
 		public event Action<BreachSourceBase> EntranceBreached;
 
@@ -27,7 +27,7 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 		public EntranceActivatorService (GameTimer gameTimer)
 		{
 			_gameTimer              = gameTimer;
-			_breachActivationTicker = new Ticker(_maxInterval);
+			_breachActivationTicker = new Ticker(20f);
 		}
 
 		public void Initialize (IReadOnlyList<BreachSourceBase> breachSources)

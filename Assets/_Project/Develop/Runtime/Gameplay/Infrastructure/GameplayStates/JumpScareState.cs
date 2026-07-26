@@ -6,7 +6,7 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure.GameplayStates
 {
 	public class JumpScareState : IState<GameplayContext, GameplayTriggers>
 	{
-		private const float TimeToShoot = 0.8f;
+		private const float TimeToShoot = 1f;
 
 		private float _timeout;
 
@@ -23,6 +23,7 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure.GameplayStates
 			if (Input.GetKeyDown(KeyCode.X) && machine.Context.TryShoot())
 			{
 				machine.Fire(GameplayTriggers.Gameplay);
+				machine.Context.Player.Shot = true;
 				return;
 			}
 

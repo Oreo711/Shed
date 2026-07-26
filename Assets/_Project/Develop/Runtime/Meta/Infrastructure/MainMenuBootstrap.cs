@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using _Project.Develop.Runtime.Infrastructure;
 using _Project.Develop.Runtime.Infrastructure.DI;
+using _Project.Develop.Runtime.UI.MainMenu;
 using _Project.Develop.Runtime.Utilities.CoroutineManagement;
 using _Project.Develop.Runtime.Utilities.DataManagment.DataProviders;
 using _Project.Develop.Runtime.Utilities.SceneManagment;
@@ -16,6 +17,8 @@ namespace _Project.Develop.Runtime.Meta.Infrastructure
         private SceneSwitcherService _sceneSwitcherService;
         private ICoroutinePerformer  _coroutinePerformer;
 
+        private MainMenuScreenPresenter _screen;
+
         public override void ProcessRegistrations(DIContainer container)
         {
             _container = container;
@@ -28,6 +31,7 @@ namespace _Project.Develop.Runtime.Meta.Infrastructure
             _playerDataProvider   = _container.Resolve<PlayerDataProvider>();
             _coroutinePerformer   = _container.Resolve<ICoroutinePerformer>();
             _sceneSwitcherService = _container.Resolve<SceneSwitcherService>();
+            _screen               = _container.Resolve<MainMenuScreenPresenter>();
 
             yield break;
         }

@@ -8,7 +8,7 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Door_States
 	{
 		public void OnEnter (IStateMachine<Door, EntranceTriggers> machine)
 		{
-			machine.Context.transform.rotation = Quaternion.Euler(0, 0, 0);
+			machine.Context.transform.rotation = Quaternion.Euler(0, 90, 90);
 		}
 
 		public void OnExit (IStateMachine<Door, EntranceTriggers> machine)

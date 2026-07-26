@@ -14,6 +14,8 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Window_Stat
 			_breachTimer = machine.Context.BreachTime;
 			_pacifyTimer = machine.Context.PacifyTime;
 
+			machine.Context.Player.EncounteredWindow = true;
+
 			machine.Context.transform.rotation = Quaternion.Euler(0, -25, 0);
 		}
 

@@ -18,8 +18,9 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Door_States
 			machine.Context.PlayOpenSound();
 
 			machine.Context.Player.CanNotAct = true;
+			machine.Context.Player.EncounteredDoor = true;
 
-			machine.Context.transform.rotation = Quaternion.Euler(0, 25, 0);
+			machine.Context.transform.rotation = Quaternion.Euler(0, 115, 90);
 		}
 
 		public void OnExit (IStateMachine<Door, EntranceTriggers> machine)
@@ -29,7 +30,7 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Door_States
 
 			machine.Context.Player.CanNotAct = false;
 
-			machine.Context.transform.rotation = Quaternion.Euler(0, 0, 0);
+			machine.Context.transform.rotation = Quaternion.Euler(0, 90, 90);
 		}
 
 		public void Tick (IStateMachine<Door, EntranceTriggers> machine, float deltaTime)

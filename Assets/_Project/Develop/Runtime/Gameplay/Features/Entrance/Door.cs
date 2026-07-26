@@ -11,8 +11,10 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 		[SerializeField] private Player      _player;
 		[SerializeField] private float       _preparationTime;
 		[SerializeField] private float       _pacifyTime;
+		[SerializeField] private float       _timeBeforeKnock;
 		[SerializeField] private AudioSource _openSound;
 		[SerializeField] private AudioSource _closeSound;
+		[SerializeField] private AudioSource _knockingSound;
 
 		public override event Action<BreachSourceBase> Breached;
 
@@ -20,14 +22,30 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
 		public float  PreparationTime => _preparationTime;
 		public float  PacifyTime      => _pacifyTime;
 
+		private float _remainingTimeBeforeKnock;
+		private bool  _hasKnocked;
+
 		private void Awake ()
 		{
-			StateMachine = BuildStateMachine();
+			StateMachine              = BuildStateMachine();
+			_remainingTimeBeforeKnock = _timeBeforeKnock;
 		}
 
 		private void Update ()
 		{
 			StateMachine.Tick(Time.deltaTime);
+
+			if (_remainingTimeBeforeKnock > 0)
+			{
+				_remainingTimeBeforeKnock -= Time.deltaTime;
+			}
+
+			if (_remainingTimeBeforeKnock <= 0 && !_hasKnocked)
+			{
+				_hasKnocked           = true;
+				_player.HeardKnocking = true;
+				_knockingSound.Play();
+			}
 		}
 
 		private StateMachine<Door, EntranceTriggers> BuildStateMachine ()

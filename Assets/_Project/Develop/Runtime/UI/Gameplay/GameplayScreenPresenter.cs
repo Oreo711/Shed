@@ -1,5 +1,6 @@
 using _Project.Develop.Runtime.Gameplay.Features;
 using _Project.Develop.Runtime.UI.Core;
+using UnityEngine;
 
 
 namespace _Project.Develop.Runtime.UI.Gameplay
@@ -25,14 +26,19 @@ namespace _Project.Develop.Runtime.UI.Gameplay
 		{
 			_screen.DisableRechargeBar();
 			_screen.DisableClock();
-			_screen.DisableInteractGuide();
+			_screen.DisableHoldInteractGuide();
+			// _screen.DisablePressInteractGuide();
+
+			_screen.QueueMonologueText("Phew.. this shed will protect me from them. I have to make sure they don't get in.");
 		}
 
 		public void Tick ()
 		{
 			Player player = _playerHolderService.Player;
 
+			ProcessMonologue();
 			_screen.SetClock(_gameTimer.Hours, _gameTimer.Minutes);
+			_screen.SetMonologueText();
 
 			if (player)
 			{
@@ -47,6 +53,11 @@ namespace _Project.Develop.Runtime.UI.Gameplay
 				_screen.DisableClock();
 			}
 
+			if (player.Flashlight.IsOn)
+			{
+				_screen.DisableFlashlightGuide();
+			}
+
 			if (player.IsRecharging)
 			{
 				_screen.EnableRechargeBar();
@@ -57,12 +68,54 @@ namespace _Project.Develop.Runtime.UI.Gameplay
 				_screen.DisableRechargeBar();
 			}
 
-			if (player.IsFacingBatteryBox || player.IsFacingClock)
+			if (player.CanUseBatteryBox || player.CanUseCloset)
 			{
-				_screen.EnableInteractGuide();
-			} else
+				_screen.EnableHoldInteractGuide();
+			}
+			else
 			{
-				_screen.DisableInteractGuide();
+				_screen.DisableHoldInteractGuide();
+			}
+		}
+
+		private void ProcessMonologue ()
+		{
+			Player player = _playerHolderService.Player;
+
+			if (player.HeardKnocking && !player.MonologueMilestones.HasHeardKnocking)
+			{
+				_screen.QueueMonologueText("One of them is knocking on the door.. If it opens it, I'll have to turn off the flashlight and stay quiet, it might leave if I do.");
+				player.MonologueMilestones.HasHeardKnocking = true;
+			}
+
+			if (player.EncounteredDoor && !player.MonologueMilestones.HasEncounteredDoor)
+			{
+				_screen.QueueMonologueText("...");
+				player.MonologueMilestones.HasEncounteredDoor = true;
+			}
+
+			if (player.EncounteredWindow && !player.MonologueMilestones.HasEncounteredWindow)
+			{
+				_screen.QueueMonologueText("Something is at the window. Maybe the flashlight could scare it away?");
+				player.MonologueMilestones.HasEncounteredWindow = true;
+			}
+
+			if (player.EncounteredCloset && !player.MonologueMilestones.HasEncounteredCloset)
+			{
+				_screen.QueueMonologueText("Something is rummaging in the closet, I can't let it get out.");
+				player.MonologueMilestones.HasEncounteredCloset = true;
+			}
+
+			if (player.IsLowOnBattery && !player.MonologueMilestones.HasBeenLowOnBattery)
+			{
+				_screen.QueueMonologueText("The batteries are dying... Good thing I have a box of them. I think i put it on the table.");
+				player.MonologueMilestones.HasBeenLowOnBattery = true;
+			}
+
+			if (player.Shot && !player.MonologueMilestones.HasShot)
+			{
+				_screen.QueueMonologueText("I'm out of bullets.. if I let one of them in again I'll die for sure.");
+				player.MonologueMilestones.HasShot = true;
 			}
 		}
 
