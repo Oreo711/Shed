@@ -1,3 +1,4 @@
+using System;
 using LitMotion;
 using UnityEngine;
 
@@ -10,21 +11,26 @@ namespace Shed.Runtime.Gameplay.Features
 		[SerializeField] private FirstPersonController _controller;
 		[SerializeField] private Camera                _camera;
 		[SerializeField] private LayerMask             _interactableLayerMask;
+		[SerializeField] private AudioSource           _footsteps;
+		[SerializeField] private AudioSource           _clockSound;
 
 		[Space]
 		[SerializeField] private Collider _batteryBox;
 		[SerializeField] private Collider _clock;
+		[SerializeField] private Gun      _gun;
 
 		[HideInInspector] public bool HeardKnocking;
 		[HideInInspector] public bool EncounteredDoor;
 		[HideInInspector] public bool EncounteredWindow;
 		[HideInInspector] public bool EncounteredCloset;
+		[HideInInspector] public bool PacifiedCloset;
 		[HideInInspector] public bool IsLowOnBattery;
 		[HideInInspector] public bool Shot;
 
 		private bool  _isRecharging;
 		private float _remainingRechargeTime;
 		private bool  _isFacingClock;
+		private bool  _wasWalking;
 		private bool  _isActive = true;
 
 		private readonly MonologueMilestones _monologueMilestones = new();
@@ -36,10 +42,13 @@ namespace Shed.Runtime.Gameplay.Features
 		public float               RemainingRechargeTime => _remainingRechargeTime;
 		public Camera              Camera                => _camera;
 		public Flashlight          Flashlight            => _flashlight;
+		public Gun                 Gun                   => _gun;
 		public MonologueMilestones MonologueMilestones   => _monologueMilestones;
 		public bool                CanNotAct             {get; set;}
 		public bool                CanUseBatteryBox      {get; private set;}
 		public bool                CanUseCloset          {get; set;}
+
+		public event Action Caught;
 
 		private void Awake ()
 		{
@@ -59,6 +68,18 @@ namespace Shed.Runtime.Gameplay.Features
 			if (Input.GetKeyDown(KeyCode.F))
 			{
 				_flashlight.Toggle();
+			}
+
+			if (_controller.IsWalking && !_wasWalking)
+			{
+				_footsteps.Play();
+				_wasWalking = true;
+			}
+
+			if (!_controller.IsWalking)
+			{
+				_footsteps.Stop();
+				_wasWalking = false;
 			}
 
 			if (_flashlight.BatteryPercentage <= 30)
@@ -128,9 +149,9 @@ namespace Shed.Runtime.Gameplay.Features
 		{
 			DeactivateControls();
 
-			LMotion.Create(0.0f, 1.0f, 0.35f)
+			LMotion.Create(0.0f, 1.0f, 0.25f)
 			       .WithEase(Ease.InQuad)
-			       // .WithOnComplete(() => _jumpsScareOverlay.SetActive(true))
+			       .WithOnComplete(() => Caught?.Invoke())
 			       .Bind(normalizedProgress =>
 			       {
 				       Vector3    direction      = (position - _camera.transform.position).normalized;
@@ -149,6 +170,11 @@ namespace Shed.Runtime.Gameplay.Features
 		{
 			_controller.cameraCanMove = true;
 			_controller.playerCanMove = true;
+		}
+
+		public void StopClockSound ()
+		{
+			_clockSound.Stop();
 		}
 	}
 }

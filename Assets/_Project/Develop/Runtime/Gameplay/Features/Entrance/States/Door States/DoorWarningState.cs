@@ -20,7 +20,6 @@ namespace Shed.Runtime.Gameplay.Features.Entrance.States.Door_States
 
 			door.Player.CanNotAct       = true;
 			door.Player.EncounteredDoor = true;
-			door.transform.rotation     = Quaternion.Euler(0, 115, 90);
 			door.ShowHint();
 		}
 
@@ -31,7 +30,6 @@ namespace Shed.Runtime.Gameplay.Features.Entrance.States.Door_States
 
 			Door door = machine.Context;
 			door.Player.CanNotAct   = false;
-			door.transform.rotation = Quaternion.Euler(0, 90, 90);
 			door.HideHint();
 		}
 

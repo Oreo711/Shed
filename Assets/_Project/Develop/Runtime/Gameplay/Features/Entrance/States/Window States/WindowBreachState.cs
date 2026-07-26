@@ -10,13 +10,11 @@ namespace Shed.Runtime.Gameplay.Features.Entrance.States.Window_States
 		{
 			Window window = machine.Context;
 			window.Breach();
-			window.transform.rotation = Quaternion.Euler(0, -80, 0);
 		}
 
 		public void OnExit (IStateMachine<Window, EntranceTriggers> machine)
 		{
 			Window window = machine.Context;
-			window.transform.rotation = Quaternion.Euler(0, 0, 0);
 		}
 
 		public void Tick (IStateMachine<Window, EntranceTriggers> machine, float deltaTime) {}

@@ -8,7 +8,7 @@ namespace Shed.Runtime.Gameplay.Features.Entrance.States.Closet_States
 	{
 		public void OnEnter (IStateMachine<Closet, EntranceTriggers> machine)
 		{
-			machine.Context.Door.transform.localRotation = Quaternion.Euler(0, 0, 0);
+
 		}
 
 		public void OnExit (IStateMachine<Closet, EntranceTriggers> machine)

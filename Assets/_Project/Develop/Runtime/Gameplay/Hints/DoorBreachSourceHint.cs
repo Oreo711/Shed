@@ -43,7 +43,7 @@ namespace Shed.Runtime.Gameplay.Hints
 
 		private void SetDoorRotation (float normalizedProgress)
 		{
-			// Calculate the target rotation based on the normalized progress
+
 			float targetAngle = Mathf.Lerp(0f, _openDoorAngle, normalizedProgress);
 			Vector3 newRotation = _doorInitialRotation + new Vector3(0f, targetAngle, 0f);
 			_doorTransform.localEulerAngles = newRotation;

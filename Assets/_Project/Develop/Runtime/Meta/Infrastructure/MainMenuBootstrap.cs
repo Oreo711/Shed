@@ -40,19 +40,5 @@ namespace Shed.Runtime.Meta.Infrastructure
         {
 
         }
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.S))
-            {
-                _coroutinePerformer.StartCoroutine(_playerDataProvider.SaveAsync());
-                Debug.Log("Saved!");
-            }
-
-            if (Input.GetKeyDown(KeyCode.P))
-            {
-                _coroutinePerformer.StartCoroutine(_sceneSwitcherService.SwitchToAsync(Scenes.Gameplay));
-            }
-        }
     }
 }

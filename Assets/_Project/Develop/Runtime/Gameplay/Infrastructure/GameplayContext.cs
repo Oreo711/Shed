@@ -17,7 +17,6 @@ namespace Shed.Runtime.Gameplay.Infrastructure
 	{
 		[SerializeField] private List<BreachSourceBase> _breachSources;
 		[SerializeField] private Player                 _player;
-		[SerializeField] private Gun                    _gun;
 		[SerializeField] private Clock                  _clock;
 
 		private DIContainer              _container;
@@ -49,10 +48,11 @@ namespace Shed.Runtime.Gameplay.Infrastructure
 			_sceneSwitcherService     = _container.Resolve<SceneSwitcherService>();
 			_entranceActivatorService = _container.Resolve<EntranceActivatorService>();
 			_playerHolderService      = _container.Resolve<PlayerHolderService>();
-			_screen                   = _container.Resolve<GameplayScreenPresenter>();
 
 			_entranceActivatorService.Initialize(_breachSources);
 			_playerHolderService.Initialize(_player);
+
+			_screen = _container.Resolve<GameplayScreenPresenter>();
 
 			_gameTimer.Expired                         += HandleNightPassed;
 			_entranceActivatorService.EntranceBreached += HandleBreached;
@@ -117,7 +117,7 @@ namespace Shed.Runtime.Gameplay.Infrastructure
 
 		public bool TryShoot ()
 		{
-			if (!_gun.TryPerformShot())
+			if (!_player.Gun.TryPerformShot())
 				return false;
 
 			foreach (BreachSourceBase source in _breachSources)
@@ -150,21 +150,20 @@ namespace Shed.Runtime.Gameplay.Infrastructure
 		{
 			_lastBreachedSourcePosition = breachSource.LootAtSpot;
 
-			if (_gun.Bullets > 0)
-			{
-				_stateMachine.Fire(GameplayTriggers.JumpScare);
-				return;
-			}
+			_stateMachine.Fire(GameplayTriggers.JumpScare);
+		}
 
-			EndSession(SessionResult.Loss);
+		public void SwitchToMenu ()
+		{
+			StartCoroutine(_sceneSwitcherService.SwitchToAsync(Scenes.MainMenu));
 		}
 
 		private void EndSession (SessionResult result)
 		{
-			TeardownSession();
+			_stateMachine.Fire(GameplayTriggers.EndSession);
 			ShowEndSessionScreen(result);
 
-			_stateMachine.Fire(GameplayTriggers.EndSession);
+			TeardownSession();
 		}
 
 		private void TeardownSession ()
@@ -186,16 +185,16 @@ namespace Shed.Runtime.Gameplay.Infrastructure
 			_stateMachine?.Stop();
 		}
 
-		private static void ShowEndSessionScreen (SessionResult result)
+		private void ShowEndSessionScreen (SessionResult result)
 		{
-			// TODO: Implement end session screen logic
+
 			switch (result)
 			{
 				case SessionResult.Loss:
-					Debug.Log("You Lose.");
+					_screen.ShowLossScreen();
 					break;
 				case SessionResult.Win:
-					Debug.Log("You Win!");
+					_screen.ShowWinScreen();
 					break;
 				default:
 					Debug.LogError($"Unknown session result: {result}");
@@ -203,14 +202,25 @@ namespace Shed.Runtime.Gameplay.Infrastructure
 			}
 		}
 
-		private void OnDestroy ()
-		{
-			Teardown();
-		}
-
 		public void AnimateJumpScare ()
 		{
 			_player.LookAt(_lastBreachedSourcePosition);
+		}
+
+		public void CancelJumpScare ()
+		{
+			_screen.CancelJumpScare();
+			_player.ActivateControls();
+		}
+
+		public void StopClockSound ()
+		{
+			_player.StopClockSound();
+		}
+
+		private void OnDestroy ()
+		{
+			Teardown();
 		}
 	}
 }

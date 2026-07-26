@@ -1,3 +1,4 @@
+using System;
 using Shed.Runtime.Gameplay.Features;
 using Shed.Runtime.UI.Core;
 
@@ -26,7 +27,8 @@ namespace Shed.Runtime.UI.Gameplay
 			_screen.DisableRechargeBar();
 			_screen.DisableClockWidget();
 			_screen.DisableHoldInteractGuide();
-			// _screen.DisablePressInteractGuide();
+
+			_playerHolderService.Player.Caught += ActivateJumpScare;
 
 			_screen.QueueMonologueText("Phew.. this shed will protect me from them. I have to make sure they don't get in.");
 		}
@@ -70,6 +72,21 @@ namespace Shed.Runtime.UI.Gameplay
 			}
 		}
 
+		private void ActivateJumpScare ()
+		{
+				_screen.ShowJumpScare(_playerHolderService.Player.Gun.Bullets > 0);
+		}
+
+		public void ShowWinScreen ()
+		{
+			_screen.EnableWinScreen();
+		}
+
+		public void ShowLossScreen ()
+		{
+			_screen.EnableLossScreen();
+		}
+
 		private void ShowClock (bool isFacing)
 		{
 			if (isFacing)
@@ -106,8 +123,14 @@ namespace Shed.Runtime.UI.Gameplay
 
 			if (player.EncounteredCloset && !player.MonologueMilestones.HasEncounteredCloset)
 			{
-				_screen.QueueMonologueText("Something is rummaging in the closet, I can't let it get out.");
+				_screen.QueueMonologueText("Something is rummaging through the closet, I can't let it get out.");
 				player.MonologueMilestones.HasEncounteredCloset = true;
+			}
+
+			if (player.PacifiedCloset && !player.MonologueMilestones.HasPacifiedCloset)
+			{
+				_screen.QueueMonologueText("It's gone from the closet... \n It will be back, I should be careful.");
+				player.MonologueMilestones.HasPacifiedCloset = true;
 			}
 
 			if (player.IsLowOnBattery && !player.MonologueMilestones.HasBeenLowOnBattery)
@@ -123,6 +146,14 @@ namespace Shed.Runtime.UI.Gameplay
 			}
 		}
 
-		public void Dispose () {}
+		public void CancelJumpScare ()
+		{
+			_screen.CancelJumpScare();
+		}
+
+		public void Dispose ()
+		{
+			_playerHolderService.Player.Caught -= ActivateJumpScare;
+		}
 	}
 }

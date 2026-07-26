@@ -17,14 +17,12 @@ namespace Shed.Runtime.Gameplay.Features.Entrance.States.Window_States
 			_pacifyTimer = window.PacifyTime;
 
 			window.Player.EncounteredWindow = true;
-			window.transform.rotation       = Quaternion.Euler(0, -25, 0);
 			window.ShowHint();
 		}
 
 		public void OnExit (IStateMachine<Window, EntranceTriggers> machine)
 		{
 			Window context = machine.Context;
-			context.transform.rotation = Quaternion.Euler(0, 0, 0);
 			context.HideHint();
 		}
 

@@ -8,18 +8,23 @@ namespace Shed.Runtime.Gameplay.Features.Entrance
 {
 	public class Closet : BreachSource<Closet>, IStateContext
 	{
-		[SerializeField] private Player    _player;
-		[SerializeField] private Transform _door;
-		[SerializeField] private float     _breachTime;
-		[SerializeField] private float     _pacifyTime;
+		[SerializeField] private Player      _player;
+		[SerializeField] private float       _breachTime;
+		[SerializeField] private float       _pacifyTime;
+		[SerializeField] private float       _doorOpenDuration = 1.0f;
+		[SerializeField] private Transform   _doorTransform;
+		[SerializeField] private float       _openDoorAngle = 20f;
+		[SerializeField] private AudioSource _pacifiedSound;
 
 		private bool _isBeingPacified;
 
-		public Player    Player          => _player;
-		public Transform Door            => _door;
-		public float     BreachTime      => _breachTime;
-		public float     PacifyTime      => _pacifyTime;
-		public bool      IsBeingPacified => _isBeingPacified;
+		public Player    Player           => _player;
+		public float     BreachTime       => _breachTime;
+		public float     PacifyTime       => _pacifyTime;
+		public bool      IsBeingPacified  => _isBeingPacified;
+		public float     DoorOpenDuration => _doorOpenDuration;
+		public Transform DoorTransform    => _doorTransform;
+		public float     OpenDoorAngle    => _openDoorAngle;
 
 		public override event Action<BreachSourceBase> Breached;
 
@@ -84,6 +89,11 @@ namespace Shed.Runtime.Gameplay.Features.Entrance
 			stateMachine.Start();
 
 			return stateMachine;
+		}
+
+		public void PlayPacifiedSound ()
+		{
+			_pacifiedSound.Play();
 		}
 
 		public void Breach ()

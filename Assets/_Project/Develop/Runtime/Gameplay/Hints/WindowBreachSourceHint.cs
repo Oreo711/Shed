@@ -7,8 +7,9 @@ namespace Shed.Runtime.Gameplay.Hints
 {
 	public class WindowBreachSourceHint : BreachSourceHint
 	{
-		[SerializeField] private Light _light;
-		[SerializeField] private float _lightFadeDuration = 1.0f;
+		[SerializeField] private Light      _light;
+		[SerializeField] private float      _lightFadeDuration = 1.0f;
+		[SerializeField] private GameObject _monster;
 
 		private MotionHandle _lightFadeHandle;
 		private float        _maxLightIntensity;
@@ -33,11 +34,13 @@ namespace Shed.Runtime.Gameplay.Hints
 		public override void Show ()
 		{
 			_lightFadeHandle.PlayForward();
+			_monster.gameObject.SetActive(true);
 		}
 
 		public override void Hide ()
 		{
 			_lightFadeHandle.PlayBackwards();
+			_monster.gameObject.SetActive(false);
 		}
 
 		private void OnDestroy ()

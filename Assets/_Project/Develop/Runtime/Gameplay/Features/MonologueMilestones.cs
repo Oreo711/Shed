@@ -6,6 +6,7 @@ namespace Shed.Runtime.Gameplay.Features
 		public bool HasEncounteredDoor;
 		public bool HasEncounteredWindow;
 		public bool HasEncounteredCloset;
+		public bool HasPacifiedCloset;
 		public bool HasBeenLowOnBattery;
 		public bool HasShot;
 	}

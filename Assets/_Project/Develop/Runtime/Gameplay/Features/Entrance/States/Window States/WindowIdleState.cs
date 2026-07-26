@@ -8,7 +8,7 @@ namespace Shed.Runtime.Gameplay.Features.Entrance.States.Window_States
 	{
 		public void OnEnter (IStateMachine<Window, EntranceTriggers> machine)
 		{
-			machine.Context.transform.rotation = Quaternion.Euler(0, 0, 0);
+
 		}
 
 		public void OnExit (IStateMachine<Window, EntranceTriggers> machine)

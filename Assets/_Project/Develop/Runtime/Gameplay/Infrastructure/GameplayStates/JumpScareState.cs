@@ -16,17 +16,17 @@ namespace Shed.Runtime.Gameplay.Infrastructure.GameplayStates
 			context.AnimateJumpScare();
 
 			_timeout = TimeToShoot;
-			Debug.Log("PRESS X TO SHOOT!");
 		}
 
 		public void OnExit (IStateMachine<GameplayContext, GameplayTriggers> machine) {}
 
 		public void Tick (IStateMachine<GameplayContext, GameplayTriggers> machine, float deltaTime)
 		{
-			if (Input.GetKeyDown(KeyCode.X) && machine.Context.TryShoot())
+			if (Input.GetMouseButtonDown(0) && machine.Context.TryShoot())
 			{
 				machine.Fire(GameplayTriggers.Gameplay);
 				machine.Context.Player.Shot = true;
+				machine.Context.CancelJumpScare();
 				return;
 			}
 

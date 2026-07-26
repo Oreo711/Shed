@@ -12,13 +12,22 @@ namespace Shed.Runtime.UI.Gameplay
 {
 	public class GameplayScreenView : MonoBehaviour, IView
 	{
-		[SerializeField] private Slider   _battery;
-		[SerializeField] private TMP_Text _clock;
-		[SerializeField] private Slider   _rechargeBar;
-		[SerializeField] private TMP_Text _flashlightGuide;
-		[SerializeField] private TMP_Text _pressInteractGuide;
-		[SerializeField] private TMP_Text _holdInteractGuide;
-		[SerializeField] private TMP_Text _monologue;
+		[SerializeField] private Slider      _battery;
+		[SerializeField] private TMP_Text    _clock;
+		[SerializeField] private Slider      _rechargeBar;
+		[SerializeField] private TMP_Text    _flashlightGuide;
+		[SerializeField] private TMP_Text    _pressInteractGuide;
+		[SerializeField] private TMP_Text    _holdInteractGuide;
+		[SerializeField] private TMP_Text    _monologue;
+		[SerializeField] private Image       _jumpScare;
+		[SerializeField] private AudioSource _jumpScareSound;
+		[SerializeField] private Image       _endScreenBackground;
+		[SerializeField] private TMP_Text    _winScreenText;
+		[SerializeField] private TMP_Text    _thanksForPlaying;
+		[SerializeField] private AudioSource _alarm;
+		[SerializeField] private TMP_Text    _lossScreenText;
+		[SerializeField] private AudioSource _gameOver;
+		[SerializeField] private TMP_Text    _shootWarning;
 
 		private readonly Queue<string> _monologueRequests        = new();
 		private          bool          _currentMonologueFinished = true;
@@ -64,10 +73,6 @@ namespace Shed.Runtime.UI.Gameplay
 			_clockFadeHandle.PlayBackwards();
 		}
 
-		// public void EnablePressInteractGuide() => _pressInteractGuide.gameObject.SetActive(true);
-		//
-		// public void DisablePressInteractGuide() => _pressInteractGuide.gameObject.SetActive(false);
-
 		public void EnableHoldInteractGuide () => _holdInteractGuide.gameObject.SetActive(true);
 
 		public void DisableHoldInteractGuide () => _holdInteractGuide.gameObject.SetActive(false);
@@ -75,6 +80,57 @@ namespace Shed.Runtime.UI.Gameplay
 		public void EnableFlashlightGuide () => _flashlightGuide.gameObject.SetActive(true);
 
 		public void DisableFlashlightGuide () => _flashlightGuide.gameObject.SetActive(false);
+
+		public void EnableWinScreen ()
+		{
+			StartCoroutine(ShowWinScreen());
+		}
+
+		public void EnableLossScreen ()
+		{
+			StartCoroutine(ShowLossScreen());
+		}
+
+		public void ShowJumpScare (bool showShootWarning)
+		{
+			StartCoroutine(SendJumpScare(showShootWarning));
+		}
+
+		private IEnumerator SendJumpScare (bool showShootWarning)
+		{
+			_shootWarning.gameObject.SetActive(showShootWarning);
+			_jumpScare.gameObject.SetActive(true);
+			_jumpScareSound.Play();
+
+			yield return new WaitForSeconds(1f);
+
+			_shootWarning.gameObject.SetActive(false);
+			_jumpScareSound.gameObject.SetActive(false);
+		}
+
+		private IEnumerator ShowWinScreen ()
+		{
+			_endScreenBackground.gameObject.SetActive(true);
+			_alarm.Play();
+
+			yield return new WaitForSeconds(2f);
+
+			_winScreenText.gameObject.SetActive(true);
+
+			yield return new WaitForSeconds(2f);
+
+			_thanksForPlaying.gameObject.SetActive(true);
+		}
+
+		private IEnumerator ShowLossScreen ()
+		{
+			_endScreenBackground.gameObject.SetActive(true);
+
+			yield return new WaitForSeconds(2f);
+
+			_lossScreenText.gameObject.SetActive(true);
+			_gameOver.Play();
+		}
 
 		public void QueueMonologueText (string text)
 		{
@@ -106,6 +162,13 @@ namespace Shed.Runtime.UI.Gameplay
 
 			textObject.text           = "";
 			_currentMonologueFinished = true;
+		}
+
+		public void CancelJumpScare ()
+		{
+			_jumpScare.gameObject.SetActive(false);
+			_jumpScareSound.Stop();
+			_shootWarning.gameObject.SetActive(false);
 		}
 
 		private void OnDestroy ()

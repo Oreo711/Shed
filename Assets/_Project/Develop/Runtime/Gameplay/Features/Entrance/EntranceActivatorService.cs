@@ -16,8 +16,8 @@ namespace Shed.Runtime.Gameplay.Features.Entrance
 		private const float IntervalScale = 0.9f;
 
 		private bool  _isRunning;
-		private float _minInterval = 12;
-		private float _maxInterval = 18;
+		private float _minInterval = 10;
+		private float _maxInterval = 16;
 
 		public event Action<BreachSourceBase> EntranceBreached;
 
