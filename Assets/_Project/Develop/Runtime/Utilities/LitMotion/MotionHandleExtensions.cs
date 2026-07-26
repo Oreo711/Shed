@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-namespace Shed.Runtime.Utilities
+namespace Shed.Runtime.Utilities.LitMotion
 {
 	[PublicAPI]
 	public static class MotionHandleExtensions

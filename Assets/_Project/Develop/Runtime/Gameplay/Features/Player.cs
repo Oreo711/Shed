@@ -1,3 +1,4 @@
+using LitMotion;
 using UnityEngine;
 
 
@@ -121,6 +122,33 @@ namespace Shed.Runtime.Gameplay.Features
 		public void SetActive (bool value)
 		{
 			_isActive = value;
+		}
+
+		public void LookAt (Vector3 position)
+		{
+			DeactivateControls();
+
+			LMotion.Create(0.0f, 1.0f, 0.35f)
+			       .WithEase(Ease.InQuad)
+			       // .WithOnComplete(() => _jumpsScareOverlay.SetActive(true))
+			       .Bind(normalizedProgress =>
+			       {
+				       Vector3    direction      = (position - _camera.transform.position).normalized;
+				       Quaternion targetRotation = Quaternion.LookRotation(direction);
+				       _camera.transform.rotation = Quaternion.Lerp(_camera.transform.rotation, targetRotation, normalizedProgress);
+			       });
+		}
+
+		public void DeactivateControls ()
+		{
+			_controller.cameraCanMove = false;
+			_controller.playerCanMove = false;
+		}
+
+		public void ActivateControls ()
+		{
+			_controller.cameraCanMove = true;
+			_controller.playerCanMove = true;
 		}
 	}
 }

@@ -1,5 +1,5 @@
 using LitMotion;
-using Shed.Runtime.Utilities;
+using Shed.Runtime.Utilities.LitMotion;
 using UnityEngine;
 
 

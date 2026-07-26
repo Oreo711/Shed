@@ -50,15 +50,13 @@ namespace Shed.Runtime.Gameplay.Features.Entrance
 					}
 
 					_player.CanUseCloset = !_isBeingPacified;
-				}
-				else
+				} else
 				{
 					_player.CanUseCloset = false;
 				}
-			}
-			else
+			} else
 			{
-				_isBeingPacified = false;
+				_isBeingPacified     = false;
 				_player.CanUseCloset = false;
 			}
 		}

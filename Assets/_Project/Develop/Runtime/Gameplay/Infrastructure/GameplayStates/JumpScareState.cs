@@ -12,6 +12,9 @@ namespace Shed.Runtime.Gameplay.Infrastructure.GameplayStates
 
 		public void OnEnter (IStateMachine<GameplayContext, GameplayTriggers> machine)
 		{
+			GameplayContext context = machine.Context;
+			context.AnimateJumpScare();
+
 			_timeout = TimeToShoot;
 			Debug.Log("PRESS X TO SHOOT!");
 		}

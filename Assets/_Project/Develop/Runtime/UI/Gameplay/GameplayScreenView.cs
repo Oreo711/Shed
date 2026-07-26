@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using LitMotion;
 using Shed.Runtime.UI.Core;
-using Shed.Runtime.Utilities;
+using Shed.Runtime.Utilities.LitMotion;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

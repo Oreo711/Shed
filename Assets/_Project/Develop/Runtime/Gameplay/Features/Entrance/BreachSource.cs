@@ -9,6 +9,9 @@ namespace Shed.Runtime.Gameplay.Features.Entrance
 	public abstract class BreachSourceBase : MonoBehaviour
 	{
 		[SerializeField] private BreachSourceHint _breachSourceHint;
+		[SerializeField] private Transform        _lootAtSpot;
+
+		public Vector3 LootAtSpot => _lootAtSpot.position;
 
 		public abstract event Action<BreachSourceBase> Breached;
 

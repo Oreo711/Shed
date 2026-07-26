@@ -34,6 +34,8 @@ namespace Shed.Runtime.Gameplay.Infrastructure
 
 		public Player Player => _player;
 
+		private Vector3 _lastBreachedSourcePosition;
+
 		public override void ProcessRegistrations (DIContainer container)
 		{
 			_container = container;
@@ -144,8 +146,10 @@ namespace Shed.Runtime.Gameplay.Infrastructure
 			EndSession(SessionResult.Win);
 		}
 
-		private void HandleBreached (BreachSourceBase _)
+		private void HandleBreached (BreachSourceBase breachSource)
 		{
+			_lastBreachedSourcePosition = breachSource.LootAtSpot;
+
 			if (_gun.Bullets > 0)
 			{
 				_stateMachine.Fire(GameplayTriggers.JumpScare);
@@ -202,6 +206,11 @@ namespace Shed.Runtime.Gameplay.Infrastructure
 		private void OnDestroy ()
 		{
 			Teardown();
+		}
+
+		public void AnimateJumpScare ()
+		{
+			_player.LookAt(_lastBreachedSourcePosition);
 		}
 	}
 }

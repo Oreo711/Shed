@@ -273,6 +273,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 21.910952, y: 19.554813, z: 2.2317145}
   m_Center: {x: 0.0000004768373, y: 9.777407, z: 0.06559094}
+--- !u!1 &53222926
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 53222927}
+  m_Layer: 7
+  m_Name: Look At
+  m_TagString: Untagged
+  m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &53222927
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 53222926}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.5, y: 0.5, z: 0.5, w: 0.5}
+  m_LocalPosition: {x: -1.040732, y: 0.7197665, z: -1.56}
+  m_LocalScale: {x: 0.25418732, y: 0.30192828, z: 0.30192828}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 783669756}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &145003588
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -575,6 +606,7 @@ Transform:
   - {fileID: 1319418454}
   - {fileID: 866954072}
   - {fileID: 408487866}
+  - {fileID: 534588555}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!114 &203877358
@@ -590,6 +622,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Project.Develop.Runtime.Gameplay.Features.Entrance.Closet
   _breachSourceHint: {fileID: 203877361}
+  _lootAtSpot: {fileID: 534588555}
   _player: {fileID: 1523328362}
   _door: {fileID: 2072956959}
   _breachTime: 8
@@ -1645,6 +1678,37 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bb291fe641c9ec74088054176b1f1c98, type: 3}
+--- !u!1 &534588554
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 534588555}
+  m_Layer: 7
+  m_Name: Look At
+  m_TagString: Untagged
+  m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &534588555
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 534588554}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.76, y: 0.705, z: -0.056}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 203877357}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &563477239
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2176,6 +2240,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Project.Develop.Runtime.Gameplay.Features.Entrance.Window
   _breachSourceHint: {fileID: 783669757}
+  _lootAtSpot: {fileID: 53222927}
   _player: {fileID: 1523328362}
   _breachTime: 9
   _pacifyTime: 3
@@ -2248,7 +2313,8 @@ Transform:
   m_LocalPosition: {x: 0.863, y: 2.7692232, z: 5.3255787}
   m_LocalScale: {x: 0.7653805, y: 0.7653805, z: 0.7653805}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 53222927}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &783669757
@@ -2265,6 +2331,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: Shed.Runtime::Shed.Runtime.Gameplay.Hints.WindowBreachSourceHint
   _light: {fileID: 1116679075}
   _lightFadeDuration: 0.5
+--- !u!1 &797333315
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 797333316}
+  m_Layer: 0
+  m_Name: Jump Scare Spot
+  m_TagString: Untagged
+  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &797333316
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 797333315}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &802800811 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 183770994155087638, guid: 6bacecc4f3df9584198879c73a6b6c36, type: 3}
@@ -2366,6 +2463,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 866954071}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &913347965
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 913347966}
+  m_Layer: 0
+  m_Name: Jump Scare Spot (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &913347966
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 913347965}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.39, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &962990523
 GameObject:
   m_ObjectHideFlags: 0
@@ -2456,13 +2584,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Project.Develop.Runtime.Gameplay.Infrastructure.GameplayBootstrap
   _breachSources:
-  - {fileID: 6765064556507913324}
-  - {fileID: 4292431288143464811}
-  - {fileID: 783669753}
   - {fileID: 203877358}
   _player: {fileID: 1523328362}
   _gun: {fileID: 802800811}
   _clock: {fileID: 2108391891}
+  _jumpScareSpot: {fileID: 0}
 --- !u!4 &978571395
 Transform:
   m_ObjectHideFlags: 0
@@ -2653,6 +2779,37 @@ Light:
   m_CorrespondingSourceObject: {fileID: 8615999633596061365, guid: fe1f550daae4a914995d0b110b906cf9, type: 3}
   m_PrefabInstance: {fileID: 1116679074}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1136671929
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1136671930}
+  m_Layer: 7
+  m_Name: Look At
+  m_TagString: Untagged
+  m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1136671930
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1136671929}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.5, y: 0.5, z: 0.5, w: 0.5}
+  m_LocalPosition: {x: -1.419, y: 0.7197665, z: 1.93}
+  m_LocalScale: {x: 0.25418732, y: 0.30192828, z: 0.30192828}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 4292431288143464809}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1153777911
 GameObject:
   m_ObjectHideFlags: 0
@@ -3449,6 +3606,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62ee5b30438e00b4a8681ee99925c4ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Project.Develop.Runtime.Gameplay.Features.Player
+--- !u!1 &1549445001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1549445002}
+  m_Layer: 7
+  m_Name: Look At
+  m_TagString: Untagged
+  m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1549445002
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1549445001}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 16.99, y: -5.04, z: -4.57}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 300268876321455607}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1564724869
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5392,6 +5580,7 @@ Transform:
   - {fileID: 5143646534897458063}
   - {fileID: 9161496588228576559}
   - {fileID: 5037482969827138108}
+  - {fileID: 1549445002}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 90}
 --- !u!4 &500085607037931189
@@ -6455,7 +6644,8 @@ Transform:
   m_LocalPosition: {x: 1.152519, y: 2.7692232, z: -5.226279}
   m_LocalScale: {x: 0.7653805, y: 0.7653805, z: 0.7653805}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1136671930}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &4292431288143464810
@@ -6492,6 +6682,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Project.Develop.Runtime.Gameplay.Features.Entrance.Window
   _breachSourceHint: {fileID: 4292431288143464812}
+  _lootAtSpot: {fileID: 1136671930}
   _player: {fileID: 1523328362}
   _breachTime: 9
   _pacifyTime: 3
@@ -7497,6 +7688,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Project.Develop.Runtime.Gameplay.Features.Entrance.Door
   _breachSourceHint: {fileID: 6765064556507913326}
+  _lootAtSpot: {fileID: 1549445002}
   _player: {fileID: 1523328362}
   _preparationTime: 1.5
   _pacifyTime: 4
@@ -8535,3 +8727,5 @@ SceneRoots:
   - {fileID: 1586469922}
   - {fileID: 356471831}
   - {fileID: 1408457109}
+  - {fileID: 797333316}
+  - {fileID: 913347966}
