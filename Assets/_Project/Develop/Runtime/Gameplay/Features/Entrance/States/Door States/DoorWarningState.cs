@@ -13,14 +13,15 @@ namespace Shed.Runtime.Gameplay.Features.Entrance.States.Door_States
 
 		public void OnEnter (IStateMachine<Door, EntranceTriggers> machine)
 		{
-			_preparationTimer = machine.Context.PreparationTime;
-			_pacifyTimer      = machine.Context.PacifyTime;
-			machine.Context.PlayOpenSound();
+			Door door = machine.Context;
+			_preparationTimer = door.PreparationTime;
+			_pacifyTimer      = door.PacifyTime;
+			door.PlayOpenSound();
 
-			machine.Context.Player.CanNotAct = true;
-			machine.Context.Player.EncounteredDoor = true;
-
-			machine.Context.transform.rotation = Quaternion.Euler(0, 115, 90);
+			door.Player.CanNotAct       = true;
+			door.Player.EncounteredDoor = true;
+			door.transform.rotation     = Quaternion.Euler(0, 115, 90);
+			door.ShowHint();
 		}
 
 		public void OnExit (IStateMachine<Door, EntranceTriggers> machine)
@@ -28,9 +29,10 @@ namespace Shed.Runtime.Gameplay.Features.Entrance.States.Door_States
 			_isPrepared       = false;
 			_playedCloseSound = false;
 
-			machine.Context.Player.CanNotAct = false;
-
-			machine.Context.transform.rotation = Quaternion.Euler(0, 90, 90);
+			Door door = machine.Context;
+			door.Player.CanNotAct   = false;
+			door.transform.rotation = Quaternion.Euler(0, 90, 90);
+			door.HideHint();
 		}
 
 		public void Tick (IStateMachine<Door, EntranceTriggers> machine, float deltaTime)

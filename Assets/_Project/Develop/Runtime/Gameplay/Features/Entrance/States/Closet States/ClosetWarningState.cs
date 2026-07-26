@@ -11,17 +11,20 @@ namespace Shed.Runtime.Gameplay.Features.Entrance.States.Closet_States
 
 		public void OnEnter (IStateMachine<Closet, EntranceTriggers> machine)
 		{
-			_breachTimer = machine.Context.BreachTime;
-			_pacifyTimer = machine.Context.PacifyTime;
+			Closet closet = machine.Context;
+			_breachTimer = closet.BreachTime;
+			_pacifyTimer = closet.PacifyTime;
 
-			machine.Context.Player.EncounteredCloset = true;
-
-			machine.Context.Door.localRotation = Quaternion.Euler(0, 20, 0);
+			closet.Player.EncounteredCloset = true;
+			closet.Door.localRotation       = Quaternion.Euler(0, 20, 0);
+			closet.ShowHint();
 		}
 
 		public void OnExit (IStateMachine<Closet, EntranceTriggers> machine)
 		{
-			machine.Context.Door.rotation = Quaternion.Euler(0, 0, 0);
+			Closet closet = machine.Context;
+			closet.Door.rotation = Quaternion.Euler(0, 0, 0);
+			closet.HideHint();
 		}
 
 		public void Tick (IStateMachine<Closet, EntranceTriggers> machine, float deltaTime)
@@ -35,7 +38,8 @@ namespace Shed.Runtime.Gameplay.Features.Entrance.States.Closet_States
 				{
 					_breachTimer -= deltaTime;
 				}
-				_pacifyTimer =  machine.Context.PacifyTime;
+
+				_pacifyTimer = machine.Context.PacifyTime;
 			}
 
 			if (_pacifyTimer <= 0)
