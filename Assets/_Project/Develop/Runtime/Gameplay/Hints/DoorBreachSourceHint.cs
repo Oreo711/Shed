@@ -10,24 +10,43 @@ namespace Shed.Runtime.Gameplay.Hints
 		[SerializeField] private Light _light;
 		[SerializeField] private float _lightFadeDuration = 1.0f;
 
+		[SerializeField] private Transform _doorTransform;
+		[SerializeField] private float     _openDoorAngle = 20f;
+
 		private MotionHandle _lightFadeHandle;
 		private float        _maxLightIntensity;
+		private Vector3        _doorInitialRotation;
 
 		private void Awake ()
 		{
 			_maxLightIntensity = _light.intensity;
+			_doorInitialRotation    = _doorTransform.localEulerAngles;
 
 			_lightFadeHandle = LMotion.Create(0f, 1f, _lightFadeDuration)
 			                          .WithEase(Ease.OutQuad)
-			                          .Bind(SetLightIntensity)
+			                          .Bind(Tick)
 			                          .Preserve()
 			                          .Pause()
 			                          .AddTo(this);
 		}
 
+		private void Tick (float normalizedProgress)
+		{
+			SetLightIntensity(normalizedProgress);
+			SetDoorRotation(normalizedProgress);
+		}
+
 		private void SetLightIntensity (float normalizedProgress)
 		{
 			_light.intensity = Mathf.Lerp(0f, _maxLightIntensity, normalizedProgress);
+		}
+
+		private void SetDoorRotation (float normalizedProgress)
+		{
+			// Calculate the target rotation based on the normalized progress
+			float targetAngle = Mathf.Lerp(0f, _openDoorAngle, normalizedProgress);
+			Vector3 newRotation = _doorInitialRotation + new Vector3(0f, targetAngle, 0f);
+			_doorTransform.localEulerAngles = newRotation;
 		}
 
 		public override void Show ()
