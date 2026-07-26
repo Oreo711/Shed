@@ -1,0 +1,16 @@
+{
+  "name": "com.kdev.modules.time-machine",
+  "displayName": "Modules.TimeMachine",
+  "version": "1.0.0",
+  "description": "TimeScale Editor",
+  "hideInEditor": false,
+  "keywords": [
+    "time",
+    "tool"
+  ],
+  "dependencies": {
+  },
+  "author": {
+    "name": "kdev"
+  }
+}
