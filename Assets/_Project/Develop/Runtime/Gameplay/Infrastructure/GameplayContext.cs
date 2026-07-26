@@ -18,6 +18,7 @@ namespace Shed.Runtime.Gameplay.Infrastructure
 		[SerializeField] private List<BreachSourceBase> _breachSources;
 		[SerializeField] private Player                 _player;
 		[SerializeField] private Gun                    _gun;
+		[SerializeField] private Clock                  _clock;
 
 		private DIContainer              _container;
 		private GameTimer                _gameTimer;
@@ -84,6 +85,8 @@ namespace Shed.Runtime.Gameplay.Infrastructure
 
 		private void LateUpdate ()
 		{
+			_clock.SetTime(_gameTimer.Hours, _gameTimer.Minutes);
+
 			if (!_isRunning)
 				return;
 
