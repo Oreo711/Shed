@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace _Project.Develop.Runtime.UI.Core
+
+namespace Shed.Runtime.UI.Core
 {
     public abstract class PopupService : IDisposable
     {

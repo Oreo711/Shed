@@ -2,7 +2,7 @@ using Modules.StateMachineLite.Develop.Runtime.Modules.State_Machine;
 using UnityEngine;
 
 
-namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Closet_States
+namespace Shed.Runtime.Gameplay.Features.Entrance.States.Closet_States
 {
 	public class ClosetBreachState : IState<Closet, EntranceTriggers>
 	{

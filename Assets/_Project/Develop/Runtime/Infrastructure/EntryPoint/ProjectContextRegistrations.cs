@@ -1,20 +1,20 @@
-﻿using _Project.Develop.Runtime.Infrastructure.DI;
-using _Project.Develop.Runtime.UI;
-using _Project.Develop.Runtime.UI.Core;
-using _Project.Develop.Runtime.Utilities.AssetManagment;
-using _Project.Develop.Runtime.Utilities.ConfigManagement;
-using _Project.Develop.Runtime.Utilities.CoroutineManagement;
-using _Project.Develop.Runtime.Utilities.DataManagment;
-using _Project.Develop.Runtime.Utilities.DataManagment.DataProviders;
-using _Project.Develop.Runtime.Utilities.DataManagment.DataRepository;
-using _Project.Develop.Runtime.Utilities.DataManagment.KeysStorage;
-using _Project.Develop.Runtime.Utilities.DataManagment.Serializers;
-using _Project.Develop.Runtime.Utilities.LoadingScreen;
-using _Project.Develop.Runtime.Utilities.SceneManagment;
+﻿using Shed.Runtime.Infrastructure.DI;
+using Shed.Runtime.UI;
+using Shed.Runtime.UI.Core;
+using Shed.Runtime.Utilities.AssetManagment;
+using Shed.Runtime.Utilities.ConfigManagement;
+using Shed.Runtime.Utilities.CoroutineManagement;
+using Shed.Runtime.Utilities.DataManagment;
+using Shed.Runtime.Utilities.DataManagment.DataProviders;
+using Shed.Runtime.Utilities.DataManagment.DataRepository;
+using Shed.Runtime.Utilities.DataManagment.KeysStorage;
+using Shed.Runtime.Utilities.DataManagment.Serializers;
+using Shed.Runtime.Utilities.LoadingScreen;
+using Shed.Runtime.Utilities.SceneManagment;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace _Project.Develop.Runtime.Infrastructure.EntryPoint
+namespace Shed.Runtime.Infrastructure.EntryPoint
 {
     public static class ProjectContextRegistrations
     {

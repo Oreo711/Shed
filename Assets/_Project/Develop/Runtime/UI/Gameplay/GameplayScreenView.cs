@@ -1,92 +1,116 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using _Project.Develop.Runtime.UI.Core;
+using LitMotion;
+using Shed.Runtime.UI.Core;
+using Shed.Runtime.Utilities;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 
-namespace _Project.Develop.Runtime.UI.Gameplay
+namespace Shed.Runtime.UI.Gameplay
 {
-    public class GameplayScreenView : MonoBehaviour, IView
-    {
-        [SerializeField] private Slider   _battery;
-        [SerializeField] private TMP_Text _clock;
-        [SerializeField] private Slider   _rechargeBar;
-        [SerializeField] private TMP_Text _flashlightGuide;
-        [SerializeField] private TMP_Text _pressInteractGuide;
-        [SerializeField] private TMP_Text _holdInteractGuide;
-        [SerializeField] private TMP_Text _monologue;
+	public class GameplayScreenView : MonoBehaviour, IView
+	{
+		[SerializeField] private Slider   _battery;
+		[SerializeField] private TMP_Text _clock;
+		[SerializeField] private Slider   _rechargeBar;
+		[SerializeField] private TMP_Text _flashlightGuide;
+		[SerializeField] private TMP_Text _pressInteractGuide;
+		[SerializeField] private TMP_Text _holdInteractGuide;
+		[SerializeField] private TMP_Text _monologue;
 
-        private readonly Queue<string> _monologueRequests        = new();
-        private          bool          _currentMonologueFinished = true;
+		private readonly Queue<string> _monologueRequests        = new();
+		private          bool          _currentMonologueFinished = true;
 
-        public void SetClock (int hours, int minutes)
-        {
-            _clock.text = hours + ":" + minutes.ToString("00");
-        }
+		private MotionHandle _clockFadeHandle;
 
-        public void SetBatteryPercentage (float percentage)
-        {
-            _battery.value = percentage / 100;
-        }
+		private void Awake ()
+		{
+			_clockFadeHandle = LMotion.Create(0f, 1f, 0.15f)
+			                          .WithEase(Ease.OutQuad)
+			                          .BindToAlpha(_clock)
+			                          .Pause()
+			                          .Preserve()
+			                          .AddTo(this);
+		}
 
-        public void SetRechargeBarPercentage (float percentage)
-        {
-            _rechargeBar.value = percentage;
-        }
+		public void SetClock (int hours, int minutes)
+		{
+			_clock.text = hours + ":" + minutes.ToString("00");
+		}
 
-        public void EnableRechargeBar() => _rechargeBar.gameObject.SetActive(true);
+		public void SetBatteryPercentage (float percentage)
+		{
+			_battery.value = percentage / 100;
+		}
 
-        public void DisableRechargeBar() => _rechargeBar.gameObject.SetActive(false);
+		public void SetRechargeBarPercentage (float percentage)
+		{
+			_rechargeBar.value = percentage;
+		}
 
-        public void EnableClock() => _clock.gameObject.SetActive(true);
+		public void EnableRechargeBar () => _rechargeBar.gameObject.SetActive(true);
 
-        public void DisableClock() => _clock.gameObject.SetActive(false);
+		public void DisableRechargeBar () => _rechargeBar.gameObject.SetActive(false);
 
-        // public void EnablePressInteractGuide() => _pressInteractGuide.gameObject.SetActive(true);
-        //
-        // public void DisablePressInteractGuide() => _pressInteractGuide.gameObject.SetActive(false);
+		public void EnableClockWidget ()
+		{
+			_clockFadeHandle.PlayForward();
+		}
 
-        public void EnableHoldInteractGuide() => _holdInteractGuide.gameObject.SetActive(true);
+		public void DisableClockWidget ()
+		{
+			_clockFadeHandle.PlayBackwards();
+		}
 
-        public void DisableHoldInteractGuide() => _holdInteractGuide.gameObject.SetActive(false);
+		// public void EnablePressInteractGuide() => _pressInteractGuide.gameObject.SetActive(true);
+		//
+		// public void DisablePressInteractGuide() => _pressInteractGuide.gameObject.SetActive(false);
 
-        public void EnableFlashlightGuide() => _flashlightGuide.gameObject.SetActive(true);
+		public void EnableHoldInteractGuide () => _holdInteractGuide.gameObject.SetActive(true);
 
-        public void DisableFlashlightGuide() => _flashlightGuide.gameObject.SetActive(false);
+		public void DisableHoldInteractGuide () => _holdInteractGuide.gameObject.SetActive(false);
 
-        public void QueueMonologueText (string text)
-        {
-            _monologueRequests.Enqueue(text);
-        }
+		public void EnableFlashlightGuide () => _flashlightGuide.gameObject.SetActive(true);
 
-        public void SetMonologueText ()
-        {
-            if (_monologueRequests.Count == 0 || !_currentMonologueFinished)
-                return;
+		public void DisableFlashlightGuide () => _flashlightGuide.gameObject.SetActive(false);
 
-            _currentMonologueFinished = false;
-            string text = _monologueRequests.Dequeue();
-            _monologue.text = "";
-            StartCoroutine(TypeLetterByLetter(_monologue, text));
-        }
+		public void QueueMonologueText (string text)
+		{
+			_monologueRequests.Enqueue(text);
+		}
 
-        private IEnumerator TypeLetterByLetter (TMP_Text textObject, string text)
-        {
-            char[] chars = text.ToCharArray();
+		public void SetMonologueText ()
+		{
+			if (_monologueRequests.Count == 0 || !_currentMonologueFinished)
+				return;
 
-            for (int i = 0; i < chars.Length; i++)
-            {
-                textObject.text += chars[i];
-                yield return new WaitForSeconds(0.03f);
-            }
+			_currentMonologueFinished = false;
+			string text = _monologueRequests.Dequeue();
+			_monologue.text = "";
+			StartCoroutine(TypeLetterByLetter(_monologue, text));
+		}
 
-            yield return new WaitForSeconds(3f);
+		private IEnumerator TypeLetterByLetter (TMP_Text textObject, string text)
+		{
+			char[] chars = text.ToCharArray();
 
-            textObject.text           = "";
-            _currentMonologueFinished = true;
-        }
-    }
+			for (int i = 0; i < chars.Length; i++)
+			{
+				textObject.text += chars[i];
+				yield return new WaitForSeconds(0.03f);
+			}
+
+			yield return new WaitForSeconds(3f);
+
+			textObject.text           = "";
+			_currentMonologueFinished = true;
+		}
+
+		private void OnDestroy ()
+		{
+			_clockFadeHandle.TryCancel();
+		}
+	}
 }

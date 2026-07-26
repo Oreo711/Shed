@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 
 
-namespace _Project.Develop.Runtime.Utilities
+namespace Shed.Runtime.Utilities
 {
 	public static class DictionaryExtensions
 	{

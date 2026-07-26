@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-namespace _Project.Develop.Runtime.Gameplay.Features
+namespace Shed.Runtime.Gameplay.Features
 {
 	public class Gun : MonoBehaviour
 	{

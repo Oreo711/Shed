@@ -1,14 +1,14 @@
 ﻿using System.Collections;
-using _Project.Develop.Runtime.Infrastructure;
-using _Project.Develop.Runtime.Infrastructure.DI;
-using _Project.Develop.Runtime.UI.MainMenu;
-using _Project.Develop.Runtime.Utilities.CoroutineManagement;
-using _Project.Develop.Runtime.Utilities.DataManagment.DataProviders;
-using _Project.Develop.Runtime.Utilities.SceneManagment;
+using Shed.Runtime.Infrastructure;
+using Shed.Runtime.Infrastructure.DI;
+using Shed.Runtime.UI.MainMenu;
+using Shed.Runtime.Utilities.CoroutineManagement;
+using Shed.Runtime.Utilities.DataManagment.DataProviders;
+using Shed.Runtime.Utilities.SceneManagment;
 using UnityEngine;
 
 
-namespace _Project.Develop.Runtime.Meta.Infrastructure
+namespace Shed.Runtime.Meta.Infrastructure
 {
     public class MainMenuBootstrap : SceneBootstrap
     {

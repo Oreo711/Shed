@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace _Project.Develop.Runtime.Infrastructure.DI
+namespace Shed.Runtime.Infrastructure.DI
 {
     public class Registration : IRegistrationOptions
     {

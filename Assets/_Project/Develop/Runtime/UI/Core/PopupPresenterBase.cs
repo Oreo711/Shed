@@ -1,10 +1,11 @@
-﻿using DG.Tweening;
-using System;
+﻿using System;
 using System.Collections;
-using _Project.Develop.Runtime.Utilities.CoroutineManagement;
+using DG.Tweening;
+using Shed.Runtime.Utilities.CoroutineManagement;
 using UnityEngine;
 
-namespace _Project.Develop.Runtime.UI.Core
+
+namespace Shed.Runtime.UI.Core
 {
     public abstract class PopupPresenterBase : IPresenter
     {

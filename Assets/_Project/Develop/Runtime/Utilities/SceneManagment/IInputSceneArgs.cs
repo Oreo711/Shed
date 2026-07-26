@@ -1,4 +1,4 @@
-﻿namespace _Project.Develop.Runtime.Utilities.SceneManagment
+﻿namespace Shed.Runtime.Utilities.SceneManagment
 {
     public interface IInputSceneArgs
     {

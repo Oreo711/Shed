@@ -1,10 +1,10 @@
 using System;
-using _Project.Develop.Runtime.UI.Core;
+using Shed.Runtime.UI.Core;
 using UnityEngine;
 using UnityEngine.UI;
 
 
-namespace _Project.Develop.Runtime.UI.MainMenu
+namespace Shed.Runtime.UI.MainMenu
 {
     public class MainMenuScreenView : MonoBehaviour, IView
     {

@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 
 
-namespace _Project.Develop.Runtime.Utilities.DataManagment.DataRepository
+namespace Shed.Runtime.Utilities.DataManagment.DataRepository
 {
     public class PlayerPrefsDataRepository : IDataRepository
     {

@@ -1,12 +1,12 @@
-﻿using _Project.Develop.Runtime.Infrastructure.DI;
-using _Project.Develop.Runtime.UI;
-using _Project.Develop.Runtime.UI.Core;
-using _Project.Develop.Runtime.UI.MainMenu;
-using _Project.Develop.Runtime.Utilities.AssetManagment;
+﻿using Shed.Runtime.Infrastructure.DI;
+using Shed.Runtime.UI;
+using Shed.Runtime.UI.Core;
+using Shed.Runtime.UI.MainMenu;
+using Shed.Runtime.Utilities.AssetManagment;
 using UnityEngine;
 
 
-namespace _Project.Develop.Runtime.Meta.Infrastructure
+namespace Shed.Runtime.Meta.Infrastructure
 {
     public static class MainMenuContextRegistrations
     {

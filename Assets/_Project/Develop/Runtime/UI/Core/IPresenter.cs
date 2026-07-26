@@ -1,8 +1,8 @@
 using System;
-using _Project.Develop.Runtime.Infrastructure.DI;
+using Shed.Runtime.Infrastructure.DI;
 
 
-namespace _Project.Develop.Runtime.UI.Core
+namespace Shed.Runtime.UI.Core
 {
 	public interface IPresenter : IInitializable, IDisposable
 	{

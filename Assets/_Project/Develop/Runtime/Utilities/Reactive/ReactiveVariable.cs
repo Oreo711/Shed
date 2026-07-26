@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 
 
-namespace _Project.Develop.Runtime.Utilities.Reactive
+namespace Shed.Runtime.Utilities.Reactive
 {
     public class ReactiveVariable<T> : IReadOnlyVariable<T>
     {

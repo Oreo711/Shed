@@ -1,4 +1,4 @@
-namespace _Project.Develop.Runtime.UI.Core
+namespace Shed.Runtime.UI.Core
 {
 	public class ViewIDs
 	{

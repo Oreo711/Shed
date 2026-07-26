@@ -1,7 +1,7 @@
 using System;
 
 
-namespace _Project.Develop.Runtime.Utilities.Reactive
+namespace Shed.Runtime.Utilities.Reactive
 {
     public interface IReadOnlyVariable<T>
     {

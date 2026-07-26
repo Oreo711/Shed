@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-namespace _Project.Develop.Runtime.UI.Gameplay
+namespace Shed.Runtime.UI.Gameplay
 {
 	public class GameplayUIRoot : MonoBehaviour
 	{

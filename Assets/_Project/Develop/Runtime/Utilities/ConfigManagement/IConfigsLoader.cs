@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-namespace _Project.Develop.Runtime.Utilities.ConfigManagement
+namespace Shed.Runtime.Utilities.ConfigManagement
 {
     public interface IConfigsLoader
     {

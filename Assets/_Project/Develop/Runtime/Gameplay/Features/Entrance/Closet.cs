@@ -1,10 +1,10 @@
 using System;
-using _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Closet_States;
 using Modules.StateMachineLite.Develop.Runtime.Modules.State_Machine;
+using Shed.Runtime.Gameplay.Features.Entrance.States.Closet_States;
 using UnityEngine;
 
 
-namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
+namespace Shed.Runtime.Gameplay.Features.Entrance
 {
 	public class Closet : BreachSource<Closet>, IStateContext
 	{

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-namespace _Project.Develop.Runtime.Utilities.DataManagment.DataProviders
+namespace Shed.Runtime.Utilities.DataManagment.DataProviders
 {
     public abstract class DataProvider<TData> where TData : ISaveData
     {

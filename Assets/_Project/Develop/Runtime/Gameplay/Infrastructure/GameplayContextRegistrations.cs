@@ -1,14 +1,14 @@
-﻿using _Project.Develop.Runtime.Gameplay.Features;
-using _Project.Develop.Runtime.Gameplay.Features.Entrance;
-using _Project.Develop.Runtime.Infrastructure.DI;
-using _Project.Develop.Runtime.UI;
-using _Project.Develop.Runtime.UI.Core;
-using _Project.Develop.Runtime.UI.Gameplay;
-using _Project.Develop.Runtime.Utilities.AssetManagment;
+﻿using Shed.Runtime.Gameplay.Features;
+using Shed.Runtime.Gameplay.Features.Entrance;
+using Shed.Runtime.Infrastructure.DI;
+using Shed.Runtime.UI;
+using Shed.Runtime.UI.Core;
+using Shed.Runtime.UI.Gameplay;
+using Shed.Runtime.Utilities.AssetManagment;
 using UnityEngine;
 
 
-namespace _Project.Develop.Runtime.Gameplay.Infrastructure
+namespace Shed.Runtime.Gameplay.Infrastructure
 {
 	public static class GameplayContextRegistrations
 	{

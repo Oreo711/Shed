@@ -1,9 +1,10 @@
-﻿using DG.Tweening;
-using System;
+﻿using System;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace _Project.Develop.Runtime.UI.Core
+
+namespace Shed.Runtime.UI.Core
 {
     public class PopupAnimationsCreator
     {

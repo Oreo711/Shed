@@ -1,10 +1,9 @@
-using _Project.Develop.Runtime.Infrastructure.DI;
-using _Project.Develop.Runtime.UI.Gameplay;
-using _Project.Develop.Runtime.Utilities.CoroutineManagement;
-using _Project.Develop.Runtime.Utilities.SceneManagment;
+using Shed.Runtime.Infrastructure.DI;
+using Shed.Runtime.Utilities.CoroutineManagement;
+using Shed.Runtime.Utilities.SceneManagment;
 
 
-namespace _Project.Develop.Runtime.UI.MainMenu
+namespace Shed.Runtime.UI.MainMenu
 {
 	public class MainMenuPresentersFactory
 	{

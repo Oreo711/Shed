@@ -2,7 +2,7 @@ using Modules.StateMachineLite.Develop.Runtime.Modules.State_Machine;
 using UnityEngine;
 
 
-namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Door_States
+namespace Shed.Runtime.Gameplay.Features.Entrance.States.Door_States
 {
 	public class DoorBreachState : IState<Door, EntranceTriggers>
 	{
@@ -15,7 +15,7 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Door_States
 
 		public void OnExit (IStateMachine<Door, EntranceTriggers> machine)
 		{
-			
+
 		}
 
 		public void Tick (IStateMachine<Door, EntranceTriggers> machine, float deltaTime)

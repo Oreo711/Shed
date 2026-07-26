@@ -1,7 +1,7 @@
 using Modules.StateMachineLite.Develop.Runtime.Modules.State_Machine;
 
 
-namespace _Project.Develop.Runtime.Gameplay.Infrastructure.GameplayStates
+namespace Shed.Runtime.Gameplay.Infrastructure.GameplayStates
 {
 	public class GameplayState : IState<GameplayContext, GameplayTriggers>
 	{

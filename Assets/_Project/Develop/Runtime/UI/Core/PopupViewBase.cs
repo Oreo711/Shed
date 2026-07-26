@@ -1,9 +1,10 @@
 ﻿using System;
-using UnityEngine;
 using DG.Tweening;
+using UnityEngine;
 using UnityEngine.UI;
 
-namespace _Project.Develop.Runtime.UI.Core
+
+namespace Shed.Runtime.UI.Core
 {
     public abstract class PopupViewBase : MonoBehaviour, IShowableView
     {

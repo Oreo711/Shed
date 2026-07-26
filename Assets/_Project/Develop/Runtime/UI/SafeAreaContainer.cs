@@ -1,7 +1,8 @@
-namespace Assets._Project.Develop.Runtime.UI
-{
-	using UnityEngine;
+using UnityEngine;
 
+
+namespace Shed.Runtime.UI
+{
 	[RequireComponent(typeof(RectTransform))]
 	public class SafeAreaContainer : MonoBehaviour
 	{

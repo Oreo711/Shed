@@ -1,0 +1,20 @@
+{
+    "name": "Shed.Runtime",
+    "rootNamespace": "Shed.Runtime",
+    "references": [
+        "GUID:a58f1e2640a04be4ab117aa64318d0dd",
+        "GUID:3b570a5146f9d4f0fa107ed4559471a3",
+        "GUID:c2d02028f7e9ee048b7a2010d831ba1f",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:d681751f2ad79e44e9794542514ddbf3"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

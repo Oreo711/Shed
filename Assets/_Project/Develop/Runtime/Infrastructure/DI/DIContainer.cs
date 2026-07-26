@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 
-namespace _Project.Develop.Runtime.Infrastructure.DI
+namespace Shed.Runtime.Infrastructure.DI
 {
     public class DIContainer
     {

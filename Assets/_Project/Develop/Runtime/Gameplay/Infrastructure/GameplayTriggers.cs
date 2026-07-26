@@ -1,4 +1,4 @@
-namespace _Project.Develop.Runtime.Gameplay.Infrastructure
+namespace Shed.Runtime.Gameplay.Infrastructure
 {
 	public enum GameplayTriggers
 	{

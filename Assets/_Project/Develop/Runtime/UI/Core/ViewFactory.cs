@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using _Project.Develop.Runtime.Utilities.AssetManagment;
+using Shed.Runtime.Utilities.AssetManagment;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
 
-namespace _Project.Develop.Runtime.UI.Core
+namespace Shed.Runtime.UI.Core
 {
     public class ViewFactory
     {

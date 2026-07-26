@@ -1,10 +1,10 @@
 using System;
-using _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Door_States;
 using Modules.StateMachineLite.Develop.Runtime.Modules.State_Machine;
+using Shed.Runtime.Gameplay.Features.Entrance.States.Door_States;
 using UnityEngine;
 
 
-namespace _Project.Develop.Runtime.Gameplay.Features.Entrance
+namespace Shed.Runtime.Gameplay.Features.Entrance
 {
 	public class Door : BreachSource<Door>, IStateContext
 	{

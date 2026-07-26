@@ -1,10 +1,10 @@
-using _Project.Develop.Runtime.UI.Core;
-using _Project.Develop.Runtime.Utilities.CoroutineManagement;
-using _Project.Develop.Runtime.Utilities.SceneManagment;
+using Shed.Runtime.UI.Core;
+using Shed.Runtime.Utilities.CoroutineManagement;
+using Shed.Runtime.Utilities.SceneManagment;
 using UnityEngine;
 
 
-namespace _Project.Develop.Runtime.UI.MainMenu
+namespace Shed.Runtime.UI.MainMenu
 {
 	public class MainMenuScreenPresenter : IPresenter
 	{

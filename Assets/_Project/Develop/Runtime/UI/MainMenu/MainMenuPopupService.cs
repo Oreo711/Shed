@@ -1,8 +1,8 @@
-using _Project.Develop.Runtime.UI.Core;
+using Shed.Runtime.UI.Core;
 using UnityEngine;
 
 
-namespace _Project.Develop.Runtime.UI.MainMenu
+namespace Shed.Runtime.UI.MainMenu
 {
 	public class MainMenuPopupService : PopupService
 	{

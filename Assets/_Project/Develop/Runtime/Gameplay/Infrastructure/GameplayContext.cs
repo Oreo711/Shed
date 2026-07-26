@@ -1,17 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using _Project.Develop.Runtime.Gameplay.Features;
-using _Project.Develop.Runtime.Gameplay.Features.Entrance;
-using _Project.Develop.Runtime.Gameplay.Infrastructure.GameplayStates;
-using _Project.Develop.Runtime.Infrastructure;
-using _Project.Develop.Runtime.Infrastructure.DI;
-using _Project.Develop.Runtime.UI.Gameplay;
-using _Project.Develop.Runtime.Utilities.SceneManagment;
 using Modules.StateMachineLite.Develop.Runtime.Modules.State_Machine;
+using Shed.Runtime.Gameplay.Features;
+using Shed.Runtime.Gameplay.Features.Entrance;
+using Shed.Runtime.Gameplay.Infrastructure.GameplayStates;
+using Shed.Runtime.Infrastructure;
+using Shed.Runtime.Infrastructure.DI;
+using Shed.Runtime.UI.Gameplay;
+using Shed.Runtime.Utilities.SceneManagment;
 using UnityEngine;
 
 
-namespace _Project.Develop.Runtime.Gameplay.Infrastructure
+namespace Shed.Runtime.Gameplay.Infrastructure
 {
 	public class GameplayContext : SceneBootstrap, IStateContext
 	{

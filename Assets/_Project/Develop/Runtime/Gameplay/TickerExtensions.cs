@@ -2,7 +2,7 @@ using System;
 using JetBrains.Annotations;
 
 
-namespace _Project.Develop.Runtime.Gameplay
+namespace Shed.Runtime.Gameplay
 {
 	[PublicAPI]
 	public static class TickerExtensions

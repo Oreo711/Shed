@@ -1,9 +1,8 @@
-using _Project.Develop.Runtime.Gameplay.Features;
-using _Project.Develop.Runtime.UI.Core;
-using UnityEngine;
+using Shed.Runtime.Gameplay.Features;
+using Shed.Runtime.UI.Core;
 
 
-namespace _Project.Develop.Runtime.UI.Gameplay
+namespace Shed.Runtime.UI.Gameplay
 {
 	public class GameplayScreenPresenter : IPresenter
 	{
@@ -25,7 +24,7 @@ namespace _Project.Develop.Runtime.UI.Gameplay
 		public void Initialize ()
 		{
 			_screen.DisableRechargeBar();
-			_screen.DisableClock();
+			_screen.DisableClockWidget();
 			_screen.DisableHoldInteractGuide();
 			// _screen.DisablePressInteractGuide();
 
@@ -45,13 +44,7 @@ namespace _Project.Develop.Runtime.UI.Gameplay
 				_screen.SetBatteryPercentage(_playerHolderService.Player.Flashlight.BatteryPercentage);
 			}
 
-			if (player.IsFacingClock)
-			{
-				_screen.EnableClock();
-			} else
-			{
-				_screen.DisableClock();
-			}
+			ShowClock(player.IsFacingClock);
 
 			if (player.Flashlight.IsOn)
 			{
@@ -71,10 +64,20 @@ namespace _Project.Develop.Runtime.UI.Gameplay
 			if (player.CanUseBatteryBox || player.CanUseCloset)
 			{
 				_screen.EnableHoldInteractGuide();
-			}
-			else
+			} else
 			{
 				_screen.DisableHoldInteractGuide();
+			}
+		}
+
+		private void ShowClock (bool isFacing)
+		{
+			if (isFacing)
+			{
+				_screen.EnableClockWidget();
+			} else
+			{
+				_screen.DisableClockWidget();
 			}
 		}
 
@@ -84,7 +87,8 @@ namespace _Project.Develop.Runtime.UI.Gameplay
 
 			if (player.HeardKnocking && !player.MonologueMilestones.HasHeardKnocking)
 			{
-				_screen.QueueMonologueText("One of them is knocking on the door.. If it opens it, I'll have to turn off the flashlight and stay quiet, it might leave if I do.");
+				_screen.QueueMonologueText(
+					"One of them is knocking on the door.. If it opens it, I'll have to turn off the flashlight and stay quiet, it might leave if I do.");
 				player.MonologueMilestones.HasHeardKnocking = true;
 			}
 

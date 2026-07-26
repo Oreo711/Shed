@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 
 
-namespace _Project.Develop.Editor
+namespace Shed.Editor
 {
     [InitializeOnLoad]
     public static class EntryPointSceneAutoLoader

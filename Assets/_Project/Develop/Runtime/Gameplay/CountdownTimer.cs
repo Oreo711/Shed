@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 using UnityEngine;
 
 
-namespace _Project.Develop.Runtime.Gameplay
+namespace Shed.Runtime.Gameplay
 {
 	[PublicAPI]
 	public class CountdownTimer

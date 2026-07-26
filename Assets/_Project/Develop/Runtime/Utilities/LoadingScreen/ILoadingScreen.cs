@@ -1,4 +1,4 @@
-﻿namespace _Project.Develop.Runtime.Utilities.LoadingScreen
+﻿namespace Shed.Runtime.Utilities.LoadingScreen
 {
     public interface ILoadingScreen
     {

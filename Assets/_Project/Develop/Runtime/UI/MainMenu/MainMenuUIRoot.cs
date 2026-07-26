@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-namespace _Project.Develop.Runtime.UI.MainMenu
+namespace Shed.Runtime.UI.MainMenu
 {
 	public class MainMenuUIRoot : MonoBehaviour
 	{

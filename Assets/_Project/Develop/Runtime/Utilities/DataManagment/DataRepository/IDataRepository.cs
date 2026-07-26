@@ -2,7 +2,7 @@
 using System.Collections;
 
 
-namespace _Project.Develop.Runtime.Utilities.DataManagment.DataRepository
+namespace Shed.Runtime.Utilities.DataManagment.DataRepository
 {
     public interface IDataRepository
     {

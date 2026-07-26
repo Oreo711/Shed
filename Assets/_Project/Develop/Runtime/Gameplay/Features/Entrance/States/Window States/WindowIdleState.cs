@@ -2,7 +2,7 @@ using Modules.StateMachineLite.Develop.Runtime.Modules.State_Machine;
 using UnityEngine;
 
 
-namespace _Project.Develop.Runtime.Gameplay.Features.Entrance.States.Window_States
+namespace Shed.Runtime.Gameplay.Features.Entrance.States.Window_States
 {
 	public class WindowIdleState : IState<Window, EntranceTriggers>
 	{

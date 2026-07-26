@@ -1,7 +1,8 @@
 ﻿
-using _Project.Develop.Runtime.Infrastructure.DI;
+using Shed.Runtime.Infrastructure.DI;
 
-namespace _Project.Develop.Runtime.UI
+
+namespace Shed.Runtime.UI
 {
     public class ProjectPresentersFactory
     {

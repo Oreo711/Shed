@@ -1,4 +1,4 @@
-﻿namespace _Project.Develop.Runtime.Utilities.DataManagment.DataProviders
+﻿namespace Shed.Runtime.Utilities.DataManagment.DataProviders
 {
     public class PlayerDataProvider : DataProvider<PlayerData>
     {

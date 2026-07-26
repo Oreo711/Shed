@@ -1,4 +1,4 @@
-﻿namespace _Project.Develop.Runtime.Infrastructure.DI
+﻿namespace Shed.Runtime.Infrastructure.DI
 {
     public interface IRegistrationOptions
     {

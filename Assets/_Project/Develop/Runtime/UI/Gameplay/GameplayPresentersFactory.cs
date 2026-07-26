@@ -1,8 +1,8 @@
-using _Project.Develop.Runtime.Gameplay.Features;
-using _Project.Develop.Runtime.Infrastructure.DI;
+using Shed.Runtime.Gameplay.Features;
+using Shed.Runtime.Infrastructure.DI;
 
 
-namespace _Project.Develop.Runtime.UI.Gameplay
+namespace Shed.Runtime.UI.Gameplay
 {
 	public class GameplayPresentersFactory
 	{
