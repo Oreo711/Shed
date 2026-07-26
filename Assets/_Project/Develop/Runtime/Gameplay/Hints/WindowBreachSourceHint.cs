@@ -1,4 +1,5 @@
 using LitMotion;
+using Shed.Runtime.Gameplay.Actors;
 using Shed.Runtime.Utilities.LitMotion;
 using UnityEngine;
 
@@ -10,6 +11,7 @@ namespace Shed.Runtime.Gameplay.Hints
 		[SerializeField] private Light      _light;
 		[SerializeField] private float      _lightFadeDuration = 1.0f;
 		[SerializeField] private GameObject _monster;
+		[SerializeField] private Skull      _skull;
 
 		private MotionHandle _lightFadeHandle;
 		private float        _maxLightIntensity;
@@ -35,12 +37,14 @@ namespace Shed.Runtime.Gameplay.Hints
 		{
 			_lightFadeHandle.PlayForward();
 			_monster.gameObject.SetActive(true);
+			_skull.Show();
 		}
 
 		public override void Hide ()
 		{
 			_lightFadeHandle.PlayBackwards();
 			_monster.gameObject.SetActive(false);
+			_skull.Hide();
 		}
 
 		private void OnDestroy ()

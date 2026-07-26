@@ -7,6 +7,7 @@ using Shed.Runtime.Gameplay.Infrastructure.GameplayStates;
 using Shed.Runtime.Infrastructure;
 using Shed.Runtime.Infrastructure.DI;
 using Shed.Runtime.UI.Gameplay;
+using Shed.Runtime.Utilities.CoroutineManagement;
 using Shed.Runtime.Utilities.SceneManagment;
 using UnityEngine;
 
@@ -24,6 +25,7 @@ namespace Shed.Runtime.Gameplay.Infrastructure
 		private EntranceActivatorService _entranceActivatorService;
 		private PlayerHolderService      _playerHolderService;
 		private SceneSwitcherService     _sceneSwitcherService;
+		private ICoroutinePerformer      _coroutinePerformer;
 
 		private GameplayScreenPresenter _screen;
 
@@ -34,6 +36,7 @@ namespace Shed.Runtime.Gameplay.Infrastructure
 		public Player Player => _player;
 
 		private Vector3 _lastBreachedSourcePosition;
+
 
 		public override void ProcessRegistrations (DIContainer container)
 		{
@@ -48,6 +51,7 @@ namespace Shed.Runtime.Gameplay.Infrastructure
 			_sceneSwitcherService     = _container.Resolve<SceneSwitcherService>();
 			_entranceActivatorService = _container.Resolve<EntranceActivatorService>();
 			_playerHolderService      = _container.Resolve<PlayerHolderService>();
+			_coroutinePerformer       = _container.Resolve<ICoroutinePerformer>();
 
 			_entranceActivatorService.Initialize(_breachSources);
 			_playerHolderService.Initialize(_player);
@@ -155,7 +159,7 @@ namespace Shed.Runtime.Gameplay.Infrastructure
 
 		public void SwitchToMenu ()
 		{
-			StartCoroutine(_sceneSwitcherService.SwitchToAsync(Scenes.MainMenu));
+			_coroutinePerformer.StartCoroutine(_sceneSwitcherService.SwitchToAsync(Scenes.MainMenu));
 		}
 
 		private void EndSession (SessionResult result)
@@ -187,7 +191,6 @@ namespace Shed.Runtime.Gameplay.Infrastructure
 
 		private void ShowEndSessionScreen (SessionResult result)
 		{
-
 			switch (result)
 			{
 				case SessionResult.Loss:
@@ -210,7 +213,6 @@ namespace Shed.Runtime.Gameplay.Infrastructure
 		public void CancelJumpScare ()
 		{
 			_screen.CancelJumpScare();
-			_player.ActivateControls();
 		}
 
 		public void StopClockSound ()

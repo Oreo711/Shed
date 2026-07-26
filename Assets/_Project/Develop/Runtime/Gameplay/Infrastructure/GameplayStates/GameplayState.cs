@@ -7,6 +7,7 @@ namespace Shed.Runtime.Gameplay.Infrastructure.GameplayStates
 	{
 		public void OnEnter (IStateMachine<GameplayContext, GameplayTriggers> machine)
 		{
+			machine.Context.Player.ActivateControls();
 			machine.Context.ResumeEntranceActivator();
 		}
 
