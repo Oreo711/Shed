@@ -8,6 +8,7 @@ namespace Shed.Runtime.Gameplay.Features
 		[SerializeField] private Flashlight            _flashlight;
 		[SerializeField] private FirstPersonController _controller;
 		[SerializeField] private Camera                _camera;
+		[SerializeField] private LayerMask             _interactableLayerMask;
 
 		[Space]
 		[SerializeField] private Collider _batteryBox;
@@ -64,13 +65,12 @@ namespace Shed.Runtime.Gameplay.Features
 				IsLowOnBattery = true;
 			}
 
-			if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out RaycastHit hit))
+			if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out RaycastHit hit, 50, _interactableLayerMask))
 			{
 				if (hit.collider == _clock && (_clock.transform.position - transform.position).magnitude <= 7f)
 				{
 					_isFacingClock = true;
-				}
-				else
+				} else
 				{
 					_isFacingClock = false;
 				}
@@ -101,16 +101,14 @@ namespace Shed.Runtime.Gameplay.Features
 					}
 
 					CanUseBatteryBox = !_isRecharging;
-				}
-				else
+				} else
 				{
-					CanUseBatteryBox     = false;
+					CanUseBatteryBox       = false;
 					_isRecharging          = false;
 					_remainingRechargeTime = _flashlight.RechargeTime;
 					_flashlight.StopRechargeSound();
 				}
-			}
-			else
+			} else
 			{
 				CanUseBatteryBox       = false;
 				_isRecharging          = false;
