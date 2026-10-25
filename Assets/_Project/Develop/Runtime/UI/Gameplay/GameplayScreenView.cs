@@ -13,11 +13,13 @@ namespace Shed.Runtime.UI.Gameplay
 	public class GameplayScreenView : MonoBehaviour, IView
 	{
 		[SerializeField] private Slider      _battery;
+		[SerializeField] private Slider      _energy;
 		[SerializeField] private TMP_Text    _clock;
 		[SerializeField] private Slider      _rechargeBar;
 		[SerializeField] private TMP_Text    _flashlightGuide;
 		[SerializeField] private TMP_Text    _pressInteractGuide;
 		[SerializeField] private TMP_Text    _holdInteractGuide;
+		[SerializeField] private TMP_Text    _bedGetupGuide;
 		[SerializeField] private TMP_Text    _monologue;
 		[SerializeField] private Image       _jumpScare;
 		[SerializeField] private AudioSource _jumpScareSound;
@@ -54,6 +56,11 @@ namespace Shed.Runtime.UI.Gameplay
 			_battery.value = percentage / 100;
 		}
 
+		public void SetEnergyPercentage (float percentage)
+		{
+			_energy.value = percentage;
+		}
+
 		public void SetRechargeBarPercentage (float percentage)
 		{
 			_rechargeBar.value = percentage;
@@ -73,6 +80,10 @@ namespace Shed.Runtime.UI.Gameplay
 			_clockFadeHandle.PlayBackwards();
 		}
 
+		public void EnablePressInteractGuide () => _pressInteractGuide.gameObject.SetActive(true);
+
+		public void DisablePressInteractGuide () => _pressInteractGuide.gameObject.SetActive(false);
+
 		public void EnableHoldInteractGuide () => _holdInteractGuide.gameObject.SetActive(true);
 
 		public void DisableHoldInteractGuide () => _holdInteractGuide.gameObject.SetActive(false);
@@ -80,6 +91,10 @@ namespace Shed.Runtime.UI.Gameplay
 		public void EnableFlashlightGuide () => _flashlightGuide.gameObject.SetActive(true);
 
 		public void DisableFlashlightGuide () => _flashlightGuide.gameObject.SetActive(false);
+
+		public void EnableBedGetupGuide () => _bedGetupGuide.gameObject.SetActive(true);
+
+		public void DisableBedGetupGuide () => _bedGetupGuide.gameObject.SetActive(false);
 
 		public void EnableWinScreen ()
 		{

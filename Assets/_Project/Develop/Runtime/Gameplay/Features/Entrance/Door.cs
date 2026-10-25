@@ -42,9 +42,9 @@ namespace Shed.Runtime.Gameplay.Features.Entrance
 
 			if (_remainingTimeBeforeKnock <= 0 && !_hasKnocked)
 			{
-				_hasKnocked           = true;
-				_player.HeardKnocking = true;
+				_hasKnocked = true;
 				_knockingSound.Play();
+				_player.MonologueService.ShowKnockingMonologue();
 			}
 		}
 

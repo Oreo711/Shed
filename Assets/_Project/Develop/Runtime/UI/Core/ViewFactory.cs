@@ -14,7 +14,7 @@ namespace Shed.Runtime.UI.Core
         private readonly Dictionary<string, string> _viewIDToResourcesPath = new Dictionary<string, string>()
         {
             {ViewIDs.GameplayScreen, "UI/Gameplay/Gameplay Screen View"},
-            {ViewIDs.MainMenuScreen, "UI/Meta/Main Menu Screen View"},
+            {ViewIDs.MainMenuScreen, "UI/Menu/Main Menu Screen View"},
         };
 
         public ViewFactory(ResourcesAssetLoader resourcesAssetsLoader)

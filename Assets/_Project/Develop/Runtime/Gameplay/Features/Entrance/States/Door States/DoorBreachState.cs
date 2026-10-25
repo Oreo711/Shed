@@ -10,7 +10,7 @@ namespace Shed.Runtime.Gameplay.Features.Entrance.States.Door_States
 		{
 			Door door = machine.Context;
 			door.Breach();
-			door.transform.rotation = Quaternion.Euler(0, 170, 90);
+			// door.transform.rotation = Quaternion.Euler(0, 170, 90);
 		}
 
 		public void OnExit (IStateMachine<Door, EntranceTriggers> machine)

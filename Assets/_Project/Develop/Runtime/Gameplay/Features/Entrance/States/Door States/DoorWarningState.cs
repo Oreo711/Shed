@@ -17,9 +17,9 @@ namespace Shed.Runtime.Gameplay.Features.Entrance.States.Door_States
 			_preparationTimer = door.PreparationTime;
 			_pacifyTimer      = door.PacifyTime;
 			door.PlayOpenSound();
+			door.Player.MonologueService.ShowDoorEncounterMonologue();
 
-			door.Player.CanNotAct       = true;
-			door.Player.EncounteredDoor = true;
+			door.Player.CanNotAct = true;
 			door.ShowHint();
 		}
 
@@ -49,7 +49,7 @@ namespace Shed.Runtime.Gameplay.Features.Entrance.States.Door_States
 
 			_pacifyTimer -= deltaTime;
 
-			if (_pacifyTimer <= 1 && !_playedCloseSound)
+			if (_pacifyTimer <= 0.75 && !_playedCloseSound)
 			{
 				machine.Context.PlayCloseSound();
 				_playedCloseSound = true;

@@ -1,58 +1,70 @@
 using System;
 using LitMotion;
+using Modules.StateMachineLite.Develop.Runtime.Modules.State_Machine;
+using Shed.Runtime.Gameplay.Features.Entrance.States.Player_States;
 using UnityEngine;
 
 
 namespace Shed.Runtime.Gameplay.Features
 {
-	public class Player : MonoBehaviour
+	public class Player : MonoBehaviour, IStateContext
 	{
 		[SerializeField] private Flashlight            _flashlight;
 		[SerializeField] private FirstPersonController _controller;
 		[SerializeField] private Camera                _camera;
 		[SerializeField] private LayerMask             _interactableLayerMask;
 		[SerializeField] private AudioSource           _footsteps;
-		[SerializeField] private AudioSource           _clockSound;
+		[SerializeField] private Clock                 _clock;
+		[SerializeField] private float                 _maxEnergy;
+		[SerializeField] private Rigidbody             _rigidbody;
 
 		[Space]
 		[SerializeField] private Collider _batteryBox;
-		[SerializeField] private Collider _clock;
-		[SerializeField] private Gun      _gun;
-
-		[HideInInspector] public bool HeardKnocking;
-		[HideInInspector] public bool EncounteredDoor;
-		[HideInInspector] public bool EncounteredWindow;
-		[HideInInspector] public bool EncounteredCloset;
-		[HideInInspector] public bool PacifiedCloset;
-		[HideInInspector] public bool IsLowOnBattery;
-		[HideInInspector] public bool Shot;
+		[SerializeField] private Gun _gun;
+		[SerializeField] private Bed _bed;
 
 		private bool  _isRecharging;
 		private float _remainingRechargeTime;
 		private bool  _isFacingClock;
 		private bool  _wasWalking;
+		private float _energy;
 		private bool  _isActive = true;
 
-		private readonly MonologueMilestones _monologueMilestones = new();
+		private MonologueService                          _monologueService;
+		private StateMachine<Player, PlayerStateTriggers> _stateMachine;
 
-		public bool                IsWalking             => _controller.IsWalking;
-		public bool                IsUsingFlashlight     => _flashlight.IsOn;
-		public bool                IsRecharging          => _isRecharging;
-		public bool                IsFacingClock         => _isFacingClock;
-		public float               RemainingRechargeTime => _remainingRechargeTime;
-		public Camera              Camera                => _camera;
-		public Flashlight          Flashlight            => _flashlight;
-		public Gun                 Gun                   => _gun;
-		public MonologueMilestones MonologueMilestones   => _monologueMilestones;
-		public bool                CanNotAct             {get; set;}
-		public bool                CanUseBatteryBox      {get; private set;}
-		public bool                CanUseCloset          {get; set;}
+		public bool             IsWalking             => _controller.IsWalking;
+		public bool             IsUsingFlashlight     => _flashlight.IsOn;
+		public bool             IsRecharging          => _isRecharging;
+		public bool             IsFacingClock         => _isFacingClock;
+		public float            RemainingRechargeTime => _remainingRechargeTime;
+		public float            Energy                => _energy;
+		public float            MaxEnergy             => _maxEnergy;
+		public Camera           Camera                => _camera;
+		public Flashlight       Flashlight            => _flashlight;
+		public Gun              Gun                   => _gun;
+		public Bed              Bed                   => _bed;
+		public MonologueService MonologueService      => _monologueService;
+		public Rigidbody        Rigidbody             => _rigidbody;
+		public bool             CanNotAct             {get; set;}
+		public bool             CanUseBatteryBox      {get; private set;}
+		public bool             CanUseCloset          {get; set;}
+		public bool             CanUseBed             {get; set;}
+		public bool             CanStopUsingBed       {get; set;}
+		public bool             IsResting             {get; set;}
 
 		public event Action Caught;
 
+		public void Initialize (MonologueService monologueService)
+		{
+			_monologueService = monologueService;
+		}
+
 		private void Awake ()
 		{
+			_stateMachine          = BuildStateMachine();
 			_remainingRechargeTime = _flashlight.RechargeTime;
+			_energy                = _maxEnergy;
 		}
 
 		private void Update ()
@@ -63,7 +75,19 @@ namespace Shed.Runtime.Gameplay.Features
 				return;
 			}
 
+			_stateMachine.Tick(Time.deltaTime);
+
 			_controller.playerCanMove = true;
+
+			if (_flashlight.BatteryPercentage <= 30f)
+			{
+				_monologueService.ShowLowBatteryMonologue();
+			}
+
+			if (_energy / _maxEnergy < 0.25f)
+			{
+				_monologueService.ShowLowEnergyMonologue();
+			}
 
 			if (Input.GetKeyDown(KeyCode.F))
 			{
@@ -82,19 +106,30 @@ namespace Shed.Runtime.Gameplay.Features
 				_wasWalking = false;
 			}
 
-			if (_flashlight.BatteryPercentage <= 30)
-			{
-				IsLowOnBattery = true;
-			}
-
 			if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out RaycastHit hit, 50, _interactableLayerMask))
 			{
-				if (hit.collider == _clock && (_clock.transform.position - transform.position).magnitude <= 7f)
+				if (hit.collider.gameObject == _clock.gameObject && (_clock.transform.position - transform.position).magnitude <= 4f)
 				{
 					_isFacingClock = true;
 				} else
 				{
 					_isFacingClock = false;
+				}
+
+				if (hit.collider.gameObject == _bed.gameObject && (_bed.transform.position - transform.position).magnitude <= 7f)
+				{
+					if (!IsResting)
+					{
+						CanUseBed = true;
+					}
+
+					if (Input.GetKeyDown(KeyCode.E))
+					{
+						_stateMachine.Fire(PlayerStateTriggers.resting);
+					}
+				} else
+				{
+					CanUseBed = false;
 				}
 
 				if (hit.collider == _batteryBox && (_batteryBox.transform.position - transform.position).magnitude <= 2.5f)
@@ -160,21 +195,61 @@ namespace Shed.Runtime.Gameplay.Features
 			       });
 		}
 
+		private StateMachine<Player, PlayerStateTriggers> BuildStateMachine ()
+		{
+			StateMachine<Player, PlayerStateTriggers> stateMachine = new(this);
+
+			stateMachine.AddState<ActiveState>()
+			            .AllowTransition<RestingState>(PlayerStateTriggers.resting)
+			            .SetAsInitial();
+
+			stateMachine.AddState<RestingState>()
+			            .AllowTransition<ActiveState>(PlayerStateTriggers.active);
+
+			stateMachine.Start();
+
+			return stateMachine;
+		}
+
 		public void DeactivateControls ()
 		{
 			_controller.cameraCanMove = false;
 			_controller.playerCanMove = false;
+			_controller.enableHeadBob = false;
 		}
 
 		public void ActivateControls ()
 		{
 			_controller.cameraCanMove = true;
 			_controller.playerCanMove = true;
+			_controller.enableHeadBob = true;
+		}
+
+		public void SpendEnergy (float value)
+		{
+			if (_energy - value < 0)
+			{
+				_energy = 0;
+			} else
+			{
+				_energy -= value;
+			}
+		}
+
+		public void RegainEnergy (float value)
+		{
+			if (_energy + value > _maxEnergy)
+			{
+				_energy = _maxEnergy;
+			} else
+			{
+				_energy += value;
+			}
 		}
 
 		public void StopClockSound ()
 		{
-			_clockSound.Stop();
+			_clock.StopClockSound();
 		}
 	}
 }

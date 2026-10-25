@@ -16,7 +16,8 @@ namespace Shed.Runtime.Gameplay.Infrastructure
 {
 	public class GameplayContext : SceneBootstrap, IStateContext
 	{
-		[SerializeField] private List<BreachSourceBase> _breachSources;
+		[SerializeField] private List<BreachSourceBase> _mainCycleBreachSources;
+		[SerializeField] private List<BreachSourceBase> _additionalBreachSources;
 		[SerializeField] private Player                 _player;
 		[SerializeField] private Clock                  _clock;
 
@@ -53,10 +54,14 @@ namespace Shed.Runtime.Gameplay.Infrastructure
 			_playerHolderService      = _container.Resolve<PlayerHolderService>();
 			_coroutinePerformer       = _container.Resolve<ICoroutinePerformer>();
 
-			_entranceActivatorService.Initialize(_breachSources);
+
+			_entranceActivatorService.Initialize(_mainCycleBreachSources, _additionalBreachSources);
 			_playerHolderService.Initialize(_player);
 
 			_screen = _container.Resolve<GameplayScreenPresenter>();
+
+			MonologueService monologueService = _container.Resolve<MonologueService>();
+			_player.Initialize(monologueService);
 
 			_gameTimer.Expired                         += HandleNightPassed;
 			_entranceActivatorService.EntranceBreached += HandleBreached;
@@ -124,7 +129,7 @@ namespace Shed.Runtime.Gameplay.Infrastructure
 			if (!_player.Gun.TryPerformShot())
 				return false;
 
-			foreach (BreachSourceBase source in _breachSources)
+			foreach (BreachSourceBase source in _mainCycleBreachSources)
 				source.HandleGunshot();
 
 			return true;
@@ -152,7 +157,7 @@ namespace Shed.Runtime.Gameplay.Infrastructure
 
 		private void HandleBreached (BreachSourceBase breachSource)
 		{
-			_lastBreachedSourcePosition = breachSource.LootAtSpot;
+			_lastBreachedSourcePosition = breachSource.LookAtSpot;
 
 			_stateMachine.Fire(GameplayTriggers.JumpScare);
 		}

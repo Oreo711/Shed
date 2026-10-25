@@ -16,7 +16,6 @@ namespace Shed.Runtime.Gameplay.Infrastructure.GameplayStates
 			context.AnimateJumpScare();
 
 			_timeout = TimeToShoot;
-			Debug.Log("SHOOT!");
 		}
 
 		public void OnExit (IStateMachine<GameplayContext, GameplayTriggers> machine) {}
@@ -25,9 +24,9 @@ namespace Shed.Runtime.Gameplay.Infrastructure.GameplayStates
 		{
 			if (Input.GetMouseButtonDown(0) && machine.Context.TryShoot())
 			{
-				machine.Context.Player.Shot = true;
 				machine.Context.CancelJumpScare();
 				machine.Fire(GameplayTriggers.Gameplay);
+				machine.Context.Player.MonologueService.ShowShotMonologue();
 				return;
 			}
 

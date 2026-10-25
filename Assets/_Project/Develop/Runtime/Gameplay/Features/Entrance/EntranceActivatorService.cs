@@ -11,13 +11,14 @@ namespace Shed.Runtime.Gameplay.Features.Entrance
 		private readonly GameTimer                         _gameTimer;
 		private readonly Dictionary<BreachSourceBase, int> _aggressionValues = new();
 
-		private List<BreachSourceBase> _breachSources;
+		private List<BreachSourceBase> _mainCycleBreachSources;
+		private List<BreachSourceBase> _additionalBreachSources;
 
 		private const float IntervalScale = 0.9f;
 
 		private bool  _isRunning;
-		private float _minInterval = 10;
-		private float _maxInterval = 16;
+		private float _minInterval = 14;
+		private float _maxInterval = 20;
 
 		public event Action<BreachSourceBase> EntranceBreached;
 
@@ -30,15 +31,22 @@ namespace Shed.Runtime.Gameplay.Features.Entrance
 			_breachActivationTicker = new Ticker(20f);
 		}
 
-		public void Initialize (IReadOnlyList<BreachSourceBase> breachSources)
+		public void Initialize (IReadOnlyList<BreachSourceBase> mainCycleBreachSources, IReadOnlyList<BreachSourceBase> additionalBreachSources)
 		{
-			foreach (BreachSourceBase breachSource in breachSources)
+			foreach (BreachSourceBase breachSource in mainCycleBreachSources)
 			{
 				_aggressionValues.Add(breachSource, 0);
 				breachSource.Breached += HandleBreach;
 			}
 
-			_breachSources = _aggressionValues.Keys.ToList();
+			_additionalBreachSources = additionalBreachSources.ToList();
+
+			foreach (BreachSourceBase breachSource in additionalBreachSources)
+			{
+				breachSource.Breached += HandleBreach;
+			}
+
+			_mainCycleBreachSources = _aggressionValues.Keys.ToList();
 		}
 
 		public void Run ()
@@ -92,9 +100,9 @@ namespace Shed.Runtime.Gameplay.Features.Entrance
 		private void AdvanceAggression ()
 		{
 			int aggression = Random.Range(1, 101);
-			int index      = Random.Range(0, _breachSources.Count);
+			int index      = Random.Range(0, _mainCycleBreachSources.Count);
 
-			BreachSourceBase breachSource = _breachSources[index];
+			BreachSourceBase breachSource = _mainCycleBreachSources[index];
 
 			_aggressionValues[breachSource] += aggression;
 		}
@@ -112,6 +120,11 @@ namespace Shed.Runtime.Gameplay.Features.Entrance
 			_gameTimer.HourPassed -= ScaleInterval;
 
 			foreach (BreachSourceBase breachSource in _aggressionValues.Keys)
+			{
+				breachSource.Breached -= HandleBreach;
+			}
+
+			foreach (BreachSourceBase breachSource in _additionalBreachSources)
 			{
 				breachSource.Breached -= HandleBreach;
 			}

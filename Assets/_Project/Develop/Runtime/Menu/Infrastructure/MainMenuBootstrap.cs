@@ -8,7 +8,7 @@ using Shed.Runtime.Utilities.SceneManagment;
 using UnityEngine;
 
 
-namespace Shed.Runtime.Meta.Infrastructure
+namespace Shed.Runtime.Menu.Infrastructure
 {
 	public class MainMenuBootstrap : SceneBootstrap
 	{

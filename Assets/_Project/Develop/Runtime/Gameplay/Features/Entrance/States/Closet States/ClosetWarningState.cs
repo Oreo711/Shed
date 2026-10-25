@@ -23,8 +23,8 @@ namespace Shed.Runtime.Gameplay.Features.Entrance.States.Closet_States
 			_breachTimer         = closet.BreachTime;
 			_pacifyTimer         = closet.PacifyTime;
 			_doorInitialRotation = closet.DoorTransform.localEulerAngles;
+			closet.Player.MonologueService.ShowClosetEncounterMonologue();
 
-			closet.Player.EncounteredCloset = true;
 			closet.ShowHint();
 
 			_doorOpenHandle = LMotion.Create(0f, 1f, machine.Context.DoorOpenDuration)
@@ -64,7 +64,7 @@ namespace Shed.Runtime.Gameplay.Features.Entrance.States.Closet_States
 
 				if (!_wasBeingPacified)
 				{
-					_doorOpenHandle.PlayBackwards();
+					_doorOpenHandle.PlayBackwards(2.5f);
 					_wasBeingPacified = true;
 				}
 			}
@@ -86,9 +86,9 @@ namespace Shed.Runtime.Gameplay.Features.Entrance.States.Closet_States
 
 			if (_pacifyTimer <= 0)
 			{
-				machine.Context.Player.PacifiedCloset = true;
 				machine.Fire(EntranceTriggers.Idle);
 				machine.Context.PlayPacifiedSound();
+				machine.Context.Player.MonologueService.ShowPacifiedClosetMonologue();
 			}
 
 			if (_breachTimer <= 0)

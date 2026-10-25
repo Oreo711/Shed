@@ -6,7 +6,7 @@ using Shed.Runtime.Utilities.AssetManagment;
 using UnityEngine;
 
 
-namespace Shed.Runtime.Meta.Infrastructure
+namespace Shed.Runtime.Menu.Infrastructure
 {
     public static class MainMenuContextRegistrations
     {
@@ -35,7 +35,7 @@ namespace Shed.Runtime.Meta.Infrastructure
             ResourcesAssetLoader resourcesAssetsLoader = c.Resolve<ResourcesAssetLoader>();
 
             MainMenuUIRoot gameplayUIRootPrefab = resourcesAssetsLoader
-                .Load<MainMenuUIRoot>("UI/Meta/Main Menu UI Root");
+                .Load<MainMenuUIRoot>("UI/Menu/Main Menu UI Root");
 
             return Object.Instantiate(gameplayUIRootPrefab);
         }

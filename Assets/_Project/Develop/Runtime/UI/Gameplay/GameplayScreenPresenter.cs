@@ -27,23 +27,23 @@ namespace Shed.Runtime.UI.Gameplay
 			_screen.DisableRechargeBar();
 			_screen.DisableClockWidget();
 			_screen.DisableHoldInteractGuide();
+			_screen.DisablePressInteractGuide();
+			_screen.DisableBedGetupGuide();
 
 			_playerHolderService.Player.Caught += ActivateJumpScare;
-
-			_screen.QueueMonologueText("Phew.. this shed will protect me from them. I have to make sure they don't get in.");
 		}
 
 		public void Tick ()
 		{
 			Player player = _playerHolderService.Player;
 
-			ProcessMonologue();
 			_screen.SetClock(_gameTimer.Hours, _gameTimer.Minutes);
 			_screen.SetMonologueText();
 
 			if (player)
 			{
 				_screen.SetBatteryPercentage(_playerHolderService.Player.Flashlight.BatteryPercentage);
+				_screen.SetEnergyPercentage(_playerHolderService.Player.Energy / _playerHolderService.Player.MaxEnergy);
 			}
 
 			ShowClock(player.IsFacingClock);
@@ -69,6 +69,22 @@ namespace Shed.Runtime.UI.Gameplay
 			} else
 			{
 				_screen.DisableHoldInteractGuide();
+			}
+
+			if (player.CanUseBed)
+			{
+				_screen.EnablePressInteractGuide();
+			} else
+			{
+				_screen.DisablePressInteractGuide();
+			}
+
+			if (player.CanStopUsingBed)
+			{
+				_screen.EnableBedGetupGuide();
+			} else
+			{
+				_screen.DisableBedGetupGuide();
 			}
 		}
 
@@ -98,52 +114,9 @@ namespace Shed.Runtime.UI.Gameplay
 			}
 		}
 
-		private void ProcessMonologue ()
+		public void ProcessMonologue (string monologue)
 		{
-			Player player = _playerHolderService.Player;
-
-			if (player.HeardKnocking && !player.MonologueMilestones.HasHeardKnocking)
-			{
-				_screen.QueueMonologueText(
-					"One of them is knocking on the door..\nIf it opens it, I'll have to turn off the flashlight and stay quiet, it might leave if I do.");
-				player.MonologueMilestones.HasHeardKnocking = true;
-			}
-
-			if (player.EncounteredDoor && !player.MonologueMilestones.HasEncounteredDoor)
-			{
-				_screen.QueueMonologueText("...");
-				player.MonologueMilestones.HasEncounteredDoor = true;
-			}
-
-			if (player.EncounteredWindow && !player.MonologueMilestones.HasEncounteredWindow)
-			{
-				_screen.QueueMonologueText("Something is at the window. Maybe the flashlight could scare it away?");
-				player.MonologueMilestones.HasEncounteredWindow = true;
-			}
-
-			if (player.EncounteredCloset && !player.MonologueMilestones.HasEncounteredCloset)
-			{
-				_screen.QueueMonologueText("Something is rummaging through the closet, I can't let it get out.");
-				player.MonologueMilestones.HasEncounteredCloset = true;
-			}
-
-			if (player.PacifiedCloset && !player.MonologueMilestones.HasPacifiedCloset)
-			{
-				_screen.QueueMonologueText("It's gone from the closet... \n It will be back, I should be careful.");
-				player.MonologueMilestones.HasPacifiedCloset = true;
-			}
-
-			if (player.IsLowOnBattery && !player.MonologueMilestones.HasBeenLowOnBattery)
-			{
-				_screen.QueueMonologueText("The batteries are dying... Good thing I have a box of them. I think i put it on the table.");
-				player.MonologueMilestones.HasBeenLowOnBattery = true;
-			}
-
-			if (player.Shot && !player.MonologueMilestones.HasShot)
-			{
-				_screen.QueueMonologueText("I'm out of bullets.. if I let one of them in again I'll die for sure.");
-				player.MonologueMilestones.HasShot = true;
-			}
+			_screen.QueueMonologueText(monologue);
 		}
 
 		public void CancelJumpScare ()

@@ -27,6 +27,16 @@ namespace Shed.Runtime.Gameplay.Infrastructure
 			container.Register(CreateGameplayPopupService);
 
 			container.Register(CreatePlayerHolderService);
+
+			container.Register(CreateMonologueService);
+		}
+
+		private static MonologueService CreateMonologueService (DIContainer c)
+		{
+			MonologueService monologueService = new MonologueService(c.Resolve<GameplayScreenPresenter>());
+			monologueService.Initialize();
+
+			return monologueService;
 		}
 
 		private static PlayerHolderService CreatePlayerHolderService (DIContainer c)

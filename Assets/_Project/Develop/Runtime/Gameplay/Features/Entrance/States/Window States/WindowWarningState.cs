@@ -15,15 +15,15 @@ namespace Shed.Runtime.Gameplay.Features.Entrance.States.Window_States
 
 			_breachTimer = window.BreachTime;
 			_pacifyTimer = window.PacifyTime;
+			window.Player.MonologueService.ShowWindowEncounterMonologue();
 
-			window.Player.EncounteredWindow = true;
 			window.ShowHint();
 		}
 
 		public void OnExit (IStateMachine<Window, EntranceTriggers> machine)
 		{
-			Window context = machine.Context;
-			context.HideHint();
+			Window window = machine.Context;
+			window.HideHint();
 		}
 
 		public void Tick (IStateMachine<Window, EntranceTriggers> machine, float deltaTime)

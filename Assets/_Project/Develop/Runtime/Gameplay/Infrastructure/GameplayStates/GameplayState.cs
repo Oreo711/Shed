@@ -16,6 +16,12 @@ namespace Shed.Runtime.Gameplay.Infrastructure.GameplayStates
 			machine.Context.PauseEntranceActivator();
 		}
 
-		public void Tick (IStateMachine<GameplayContext, GameplayTriggers> machine, float deltaTime) {}
+		public void Tick (IStateMachine<GameplayContext, GameplayTriggers> machine, float deltaTime)
+		{
+			if (machine.Context.Player.Energy <= 0)
+			{
+				machine.Context.Lose();
+			}
+		}
 	}
 }

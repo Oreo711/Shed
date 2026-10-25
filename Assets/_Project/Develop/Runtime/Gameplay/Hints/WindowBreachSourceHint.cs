@@ -43,7 +43,6 @@ namespace Shed.Runtime.Gameplay.Hints
 		public override void Hide ()
 		{
 			_lightFadeHandle.PlayBackwards();
-			_monster.gameObject.SetActive(false);
 			_skull.Hide();
 		}
 
